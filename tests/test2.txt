@@ -1,0 +1,35 @@
+import { Component } from '@angular/core';
+
+@Component({
+  standalone: false,
+  selector: 'app-root',
+  template: `
+    <div class="container">
+      <h1>{{ title }}</h1>
+      <button (click)="increment()">اضغط هنا</button>
+      <p>القيمة الحالية: {{ counter }}</p>
+    </div>
+  `,
+  styles: [`
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .button {
+      background-color: blue;
+      color: white;
+      padding: 10px;
+    }
+
+
+  `]
+})
+export class AppComponent {
+  title = 'مثال ANTLR';
+  counter = 0;
+
+  increment() {
+    this.counter = this.counter + 1;
+  }
+}

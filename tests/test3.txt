@@ -1,0 +1,30 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  standalone:true,
+  imports:[CommonModule],
+  selector: 'app-root',
+  template: `
+    <input [value]="name" (input)="onInput($event)" />
+    <p>Hello {{ name }}!</p>
+  `,
+  styles: [`
+    .input {
+      padding: 10px;
+    }
+
+    .put {
+      font-size: 1.2rem;
+    }
+  `]
+})
+export class AppComponent {
+  name = 'Angular';
+
+  onInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.name = input.value;
+  }
+}
+
