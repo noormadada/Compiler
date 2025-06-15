@@ -1,6 +1,6 @@
 package AST;
 
-public class HtmlSelfClosingChunk extends HtmlChunk{
+public class HtmlSelfClosingChunk extends HtmlChunk implements AST_Node{
     SelfClosingTag selfClosingTag;
 
     public SelfClosingTag getSelfClosingTag() {

@@ -1,6 +1,6 @@
 package AST;
 
-public class LiteralExpr extends Expression {
+public class LiteralExpr extends Expression implements AST_Node {
 Literal literal;
 
     public Literal getLiteral() {

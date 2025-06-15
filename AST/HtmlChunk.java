@@ -1,6 +1,6 @@
 package AST;
 
-public class HtmlChunk {
+public abstract class HtmlChunk implements AST_Node {
 HtmlElementChunk htmlElementChunk;
 HtmlSelfClosingChunk htmlSelfClosingChunk;
 InterpolationChunk interpolationChunk;

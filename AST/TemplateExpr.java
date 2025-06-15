@@ -1,6 +1,6 @@
 package AST;
 
-public class TemplateExpr extends Expression{
+public class TemplateExpr extends Expression implements AST_Node{
     TemplateLiteral templateLiteral;
 
     public TemplateLiteral getTemplateLiteral() {

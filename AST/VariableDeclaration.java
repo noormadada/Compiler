@@ -1,6 +1,6 @@
 package AST;
 
-public class VariableDeclaration {
+public class VariableDeclaration implements AST_Node {
   String  ID ;
     Expression expression;
 

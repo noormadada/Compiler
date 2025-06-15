@@ -1,6 +1,6 @@
 package AST;
 
-public class Interpolation {
+public class Interpolation implements AST_Node {
     InterpolationContent interpolationContent;
 
     public InterpolationContent getInterpolationContent() {

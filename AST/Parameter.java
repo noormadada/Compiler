@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parameter {
+public class Parameter implements AST_Node {
     List<String> id=new ArrayList<>();
 
     public List<String> getId() {

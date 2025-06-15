@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HtmlContent {
+public class HtmlContent implements AST_Node {
     List<HtmlChunk>htmlChunkList=new ArrayList<>();
 
     public List<HtmlChunk> getHtmlChunkList() {

@@ -1,6 +1,6 @@
 package AST;
 
-public class GenericField extends ObjectField {
+public class GenericField extends ObjectField implements AST_Node{
     String ID;
     Expression expression;
 

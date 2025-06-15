@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockExpr2 extends Block {
+public class BlockExpr2 extends Block implements AST_Node {
 List<String>IdList=new ArrayList<>();
 String stringLiteral;
 

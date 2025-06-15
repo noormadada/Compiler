@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterpolationContent {
+public class InterpolationContent implements AST_Node {
     List<InterpolationExpr>interpolationExprList=new ArrayList<>();
 
     public List<InterpolationExpr> getInterpolationExprList() {

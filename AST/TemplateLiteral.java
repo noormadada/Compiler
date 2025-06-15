@@ -1,6 +1,6 @@
 package AST;
 
-public class TemplateLiteral {
+public class TemplateLiteral implements AST_Node {
 HtmlContent htmlContent;
 
     public HtmlContent getHtmlContent() {

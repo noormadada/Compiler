@@ -1,6 +1,6 @@
 package AST;
 
-public class CloseTag {
+public class CloseTag implements AST_Node{
     HtmlTag htmlTag;
 
     public HtmlTag getHtmlTag() {

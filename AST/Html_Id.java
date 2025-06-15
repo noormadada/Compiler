@@ -1,6 +1,6 @@
 package AST;
 
-public class Html_Id extends HtmlChunk {
+public class Html_Id extends HtmlChunk implements AST_Node{
     String TEMPLATE_ID;
 
     public String getTEMPLATE_ID() {

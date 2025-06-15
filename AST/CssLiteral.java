@@ -1,6 +1,6 @@
 package AST;
 
-public class CssLiteral {
+public class CssLiteral implements AST_Node {
     CssContent cssContent;
 
     public CssContent getCssContent() {

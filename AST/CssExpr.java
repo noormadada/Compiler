@@ -1,6 +1,6 @@
 package AST;
 
-public class CssExpr extends  Expression{
+public class CssExpr extends  Expression implements AST_Node{
     CssLiteral cssLiteral;
 
     public CssLiteral getCssLiteral() {

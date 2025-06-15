@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HtmlElement {
+public class HtmlElement implements AST_Node {
     HtmlTag htmlTag;
     List<HtmlAttribute>htmlAttributeList =new ArrayList<>();
     List<HtmlChunk>htmlChunkList=new ArrayList<>();

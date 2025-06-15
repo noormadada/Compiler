@@ -1,6 +1,6 @@
 package AST;
 
-public class AttributeValue {
+public class AttributeValue implements AST_Node {
     String TEMPLATE_STRING;
     String TEMPLATE_ID;
     Interpolation  interpolation;

@@ -1,6 +1,6 @@
 package AST;
 
-public class ObjectField {
+public abstract class ObjectField implements AST_Node {
     TemplateField TemplateField ;
     StylesField StylesField;
     GenericField  GenericField;

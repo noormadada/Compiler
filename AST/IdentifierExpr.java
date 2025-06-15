@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IdentifierExpr extends Expression{
+public class IdentifierExpr extends Expression implements AST_Node{
     List<String> Id=new ArrayList<>();
     List<Literal> literal=new ArrayList<>();
 

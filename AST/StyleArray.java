@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StyleArray {
+public class StyleArray implements AST_Node {
     List<CssLiteral> cssLiteral=new ArrayList<>();
 
     public List<CssLiteral> getCssLiteral() {

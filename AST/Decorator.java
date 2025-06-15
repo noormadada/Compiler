@@ -1,6 +1,6 @@
 package AST;
 
-public class Decorator {
+public class Decorator implements AST_Node  {
     String AT;
     String ID;
     ObjectLiteral  objectLiteral;

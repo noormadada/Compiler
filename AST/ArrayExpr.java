@@ -1,6 +1,6 @@
 package AST;
 
-public class ArrayExpr extends  Expression{
+public class ArrayExpr extends  Expression implements AST_Node{
     ArrayLiteral arrayLiteral;
 
     public ArrayLiteral getArrayLiteral() {

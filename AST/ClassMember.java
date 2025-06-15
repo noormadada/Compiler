@@ -1,6 +1,6 @@
 package AST;
 
-public class ClassMember {
+public class ClassMember implements AST_Node {
     VariableDeclaration variableDeclaration;
     FunctionDeclaration  functionDeclaration;
 
