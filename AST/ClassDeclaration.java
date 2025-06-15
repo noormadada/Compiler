@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassDeclaration {
+public class ClassDeclaration implements AST_Node {
   String EXPORT;
     String CLASS;
     String ID;

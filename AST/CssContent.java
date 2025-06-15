@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CssContent {
+public class CssContent implements AST_Node {
     List<CssStatement>cssStatementList=new ArrayList<>();
 
     public List<CssStatement> getCssStatementList() {

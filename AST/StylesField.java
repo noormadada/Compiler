@@ -1,6 +1,6 @@
 package AST;
 
-public class StylesField extends ObjectField{
+public class StylesField extends ObjectField implements AST_Node{
     String STYLES;
     StyleArray styleArray;
 

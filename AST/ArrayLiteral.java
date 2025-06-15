@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArrayLiteral {
+public class ArrayLiteral implements AST_Node{
 List<ArrayElement> arrayElement=new ArrayList<>();
 
     public List<ArrayElement> getArrayElement() {

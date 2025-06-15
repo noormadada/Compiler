@@ -1,6 +1,6 @@
 package AST;
 
-public class InterpolationExpr {
+public class InterpolationExpr implements AST_Node{
     String InterpolationId;
     String InterpolationString;
     String InterpolationNumber;

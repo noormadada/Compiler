@@ -1,6 +1,6 @@
 package AST;
 
-public class HtmlCloseTagChunk extends HtmlChunk {
+public class HtmlCloseTagChunk extends HtmlChunk implements AST_Node {
     CloseTag closeTag;
 
     public CloseTag getCloseTag() {

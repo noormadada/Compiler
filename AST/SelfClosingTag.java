@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelfClosingTag {
+public class SelfClosingTag implements AST_Node {
     HtmlTag htmlTag;
     List<HtmlAttribute>htmlAttributeList=new ArrayList<>();
 

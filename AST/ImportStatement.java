@@ -1,6 +1,6 @@
 package AST;
 
-public class ImportStatement {
+public class ImportStatement implements AST_Node{
    String IMPORT;
     String ID;
     String FROM;

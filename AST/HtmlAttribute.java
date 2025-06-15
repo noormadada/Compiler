@@ -1,6 +1,6 @@
 package AST;
 
-public class HtmlAttribute {
+public class HtmlAttribute implements AST_Node {
     String TEMPLATE_ID;
     String ANGULAR_PROPERTY_BINDING;
     String ANGULAR_EVENT_BINDING;

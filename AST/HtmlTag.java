@@ -1,6 +1,6 @@
 package AST;
 
-public class HtmlTag {
+public class HtmlTag implements AST_Node {
     String templateTagDiv;
     String templateTagSpan;
     String templateTagSection;

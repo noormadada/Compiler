@@ -1,6 +1,6 @@
 package AST;
 
-public class InterpolationChunk extends HtmlChunk{
+public class InterpolationChunk extends HtmlChunk implements AST_Node{
     Interpolation interpolation;
 
     public Interpolation getInterpolation() {

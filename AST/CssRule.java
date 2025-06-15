@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CssRule {
+public class CssRule implements AST_Node {
     List<String> templateId=new ArrayList<>();
     List<String> cssValue=new ArrayList<>();
 

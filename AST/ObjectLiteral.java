@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectLiteral {
+public class ObjectLiteral implements AST_Node {
     List<ObjectField> objectField = new ArrayList<>();
 
     public List<ObjectField> getObjectField() {

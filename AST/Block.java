@@ -1,6 +1,6 @@
 package AST;
 
-public class Block {
+public abstract class Block implements AST_Node {
 BlockExpr1 blockExpr1;
 BlockExpr2 blockExpr2;
 BlockExpr3 blockExpr3;

@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArrayElement {
+public class ArrayElement implements AST_Node {
     List<ObjectFieldInArray> objectFieldInArrayList=new ArrayList<>();
 
     public List<ObjectFieldInArray> getObjectFieldInArrayList() {

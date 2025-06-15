@@ -1,6 +1,6 @@
 package AST;
 
-public class HtmlElementChunk extends  HtmlChunk{
+public class HtmlElementChunk extends  HtmlChunk implements AST_Node{
     HtmlElement htmlElement;
 
     public HtmlElement getHtmlElement() {

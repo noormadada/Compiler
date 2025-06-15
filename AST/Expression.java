@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Expression {
+public abstract class Expression {
 IdentifierExpr identifierExpr;
 TemplateExpr templateExpr;
 LiteralExpr literalExpr;

@@ -1,6 +1,6 @@
 package AST;
 
-public class Literal {
+public class Literal implements AST_Node {
     String  stringLiteral;
     String number ;
     String trueId;

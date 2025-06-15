@@ -1,6 +1,6 @@
 package AST;
 
-public class ObjectFieldInArray {
+public class ObjectFieldInArray implements AST_Node {
     String Id;
     Literal literal;
 

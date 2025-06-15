@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FunctionDeclaration {
+public class FunctionDeclaration implements AST_Node {
     String Id;
     ParameterList parameterList;
     List<Block> block=new ArrayList<>();

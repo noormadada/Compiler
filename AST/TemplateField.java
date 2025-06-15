@@ -1,6 +1,6 @@
 package AST;
 
-public class TemplateField extends ObjectField {
+public class TemplateField extends ObjectField implements AST_Node {
     String TEMPLATEE;
     TemplateLiteral templateLiteral;
 

@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AngularFile {
+public class AngularFile implements AST_Node {
     List<ImportStatement> importstatement = new ArrayList<>();
     Decorator decorator;
     List<ClassDeclaration> classDeclaration=new ArrayList<>();
