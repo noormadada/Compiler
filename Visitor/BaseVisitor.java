@@ -223,21 +223,25 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         return  cssLiteral;
     }
 
+
     @Override
     public CssRule visitCssRule(ParserFile.CssRuleContext ctx) {
-        CssRule cssRule=new CssRule();
+        CssRule cssRule = new CssRule();
+
+        // ✔️ استخدم getText() هنا بدلًا من String.valueOf()
         for (int i = 0; i < ctx.TEMPLATE_ID().size(); i++) {
-            cssRule.getTemplateId().add(String.valueOf(ctx.TEMPLATE_ID().get(i)));
+            cssRule.getTemplateId().add(ctx.TEMPLATE_ID(i).getText());
         }
-        if(!ctx.CSS_VALUE().isEmpty())
-        {
+
+        if (!ctx.CSS_VALUE().isEmpty()) {
             for (int i = 0; i < ctx.CSS_VALUE().size(); i++) {
-                cssRule.getCssValue().add(String.valueOf(ctx.CSS_VALUE().get(i)));
+                cssRule.getCssValue().add(ctx.CSS_VALUE(i).getText());
             }
         }
-        return cssRule;
 
+        return cssRule;
     }
+
 
     @Override
     public CssStatement visitCssStatement(ParserFile.CssStatementContext ctx) {

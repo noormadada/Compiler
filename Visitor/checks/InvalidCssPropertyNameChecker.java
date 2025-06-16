@@ -21,8 +21,10 @@ public class InvalidCssPropertyNameChecker {
             "width", "height", "margin", "padding", "display", "border",
             "box-sizing", "flex", "gap", "align-items", "justify-content",
             "color", "background-color", "font-size", "text-align",
-            "border-radius", "position", "top", "bottom", "left", "right"
+            "border-radius", "position", "top", "bottom", "left", "right",
+            "cursor", "direction", "flex-direction", "margin-top"
     );
+
 
     public InvalidCssPropertyNameChecker(FileWriter writer, SymbolTable symbolTable) {
         this.writer = writer;
@@ -35,21 +37,32 @@ public class InvalidCssPropertyNameChecker {
 
         for (CssStatement statement : content.getCssStatementList()) {
             for (CssRule rule : statement.getCssRuleList()) {
-                for (String id : rule.getTemplateId()) {
-                    String property = id.trim();
-                    if (!VALID_CSS_PROPERTIES.contains(property)) {
-                        // سجّل الخطأ باستخدام نفس SymbolTable المُستخدم في SemanticAnalyzerVisitor
-                        Symbol errorSymbol = new Symbol(
-                                property,
-                                "invalid_css_property",
-                                List.of("invalid", "css", "property")
-                        );
-                        writer.write("Semantic Error: Invalid CSS property name '" + property + "'\n");
-                        symbolTable.define(errorSymbol);
-                        SymbolTablePrinter.print(symbolTable, List.of(property));
-                        symbolTable.remove(property); // تنظيف بعد التبليغ
+
+                List<String> allLines = new ArrayList<>();
+                allLines.addAll(rule.getTemplateId());
+                allLines.addAll(rule.getCssValue());
+
+                for (String rawProperty : allLines) {
+
+                    if (rawProperty.contains(":")) {
+                        String cleanProperty = rawProperty.split(":")[0].trim();
+
+                        System.out.println("Detected CSS Property: " + cleanProperty);
+
+                        if (!VALID_CSS_PROPERTIES.contains(cleanProperty)) {
+                            Symbol errorSymbol = new Symbol(
+                                    cleanProperty,
+                                    "invalid_css_property",
+                                    List.of("invalid", "css", "property")
+                            );
+                            writer.write("Semantic Error: Invalid CSS property name '" + cleanProperty + "'\n");
+                            symbolTable.define(errorSymbol);
+                            SymbolTablePrinter.print(symbolTable, List.of(cleanProperty));
+                            symbolTable.remove(cleanProperty);
+                        }
                     }
                 }
+
             }
         }
     }
