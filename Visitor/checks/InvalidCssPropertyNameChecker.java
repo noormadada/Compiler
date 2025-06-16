@@ -47,7 +47,7 @@ public class InvalidCssPropertyNameChecker {
                     if (rawProperty.contains(":")) {
                         String cleanProperty = rawProperty.split(":")[0].trim();
 
-                        System.out.println("Detected CSS Property: " + cleanProperty);
+                    //    System.out.println("Detected CSS Property: " + cleanProperty);
 
                         if (!VALID_CSS_PROPERTIES.contains(cleanProperty)) {
                             Symbol errorSymbol = new Symbol(

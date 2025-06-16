@@ -228,7 +228,7 @@ public class BaseVisitor extends ParserFileBaseVisitor {
     public CssRule visitCssRule(ParserFile.CssRuleContext ctx) {
         CssRule cssRule = new CssRule();
 
-        // ✔️ استخدم getText() هنا بدلًا من String.valueOf()
+
         for (int i = 0; i < ctx.TEMPLATE_ID().size(); i++) {
             cssRule.getTemplateId().add(ctx.TEMPLATE_ID(i).getText());
         }
