@@ -503,6 +503,7 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         return super.visitHtmlNewlineChunk(ctx);
     }
 
+
     @Override
     public InterpolationContent visitInterpolationContent(ParserFile.InterpolationContentContext ctx) {
         InterpolationContent interpolationContent = new InterpolationContent();

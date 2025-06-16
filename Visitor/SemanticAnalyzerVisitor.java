@@ -3,48 +3,63 @@ package Visitor;
 import AST.*;
 import SymbolTable.Symbol;
 import SymbolTable.SymbolTable;
-import SymbolTable.SymbolTablePrinter;
+import Visitor.checks.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class SemanticAnalyzerVisitor {
 
     private final SymbolTable symbolTable = new SymbolTable();
-    FileWriter writer;
 
     public void analyze(AngularFile angularFile) throws IOException {
-        writer = new FileWriter("Errors/exception_handler.txt",true);
-        writer.write("");
-        if (angularFile.getClassDeclaration() == null) return;
+        try (FileWriter writer = new FileWriter("Errors/exception_handler.txt", true)) {
 
-        checkDuplicateClassNames(angularFile);
+            if (angularFile.getClassDeclaration() == null) return;
 
-        for (ClassDeclaration classDecl : angularFile.getClassDeclaration()) {
-            checkDuplicateVariables(classDecl);
+            // التحقق من أسماء الكلاسات المكررة
+            new ClassNameChecker(writer, symbolTable).check(angularFile);
 
-            for (ClassMember member : classDecl.getClassMember()) {
-                if (member.getVariableDeclaration() != null) {
-                    defineVariable(member.getVariableDeclaration());
+            for (ClassDeclaration classDecl : angularFile.getClassDeclaration()) {
+                // التحقق من المتغيرات المكررة داخل الكلاس
+                new DuplicateVariableChecker(writer, symbolTable).check(classDecl);
+
+                for (ClassMember member : classDecl.getClassMember()) {
+                    if (member.getVariableDeclaration() != null) {
+                        // تعريف المتغير في جدول الرموز
+                        defineVariable(member.getVariableDeclaration());
+                    }
+                }
+
+                for (ClassMember member : classDecl.getClassMember()) {
+                    if (member.getVariableDeclaration() != null) {
+                        VariableDeclaration var = member.getVariableDeclaration();
+
+                        // التحقق من أخطاء المؤشرات في المصفوفات
+                        new ArrayIndexChecker(writer, symbolTable).check(var);
+
+                        // التحقق من المعرفات غير المعرفة
+                        new UndefinedIdentifierChecker(writer, symbolTable).check(var);
+
+
+                        Expression expr = var.getExpression();
+                        if (expr instanceof CssExpr cssExpr) {
+                            new InvalidCssPropertyNameChecker(writer, symbolTable)
+                                    .check(cssExpr.getCssLiteral());
+                        }
+                    }
                 }
             }
 
-            for (ClassMember member : classDecl.getClassMember()) {
-                if (member.getVariableDeclaration() != null) {
-                    checkVariableDeclarationForErrors(member.getVariableDeclaration());
-                    checkUndefinedIdentifiers(member.getVariableDeclaration());
-                }
+            // التحقق من وجود template في @Component
+            if (angularFile.getDecorator() != null) {
+                new TemplateFieldChecker(writer, symbolTable)
+                        .check(angularFile.getDecorator());
             }
         }
-        if (angularFile.getDecorator() != null) {
-            checkTemplateExistence(angularFile.getDecorator());
-        }
-        writer.close();
     }
 
+    // ✅ هذا التابع مسؤول عن تسجيل المتغيرات في جدول الرموز
     private void defineVariable(VariableDeclaration varDecl) {
         String name = varDecl.getID();
         Expression expr = varDecl.getExpression();
@@ -52,108 +67,8 @@ public class SemanticAnalyzerVisitor {
         if (expr instanceof ArrayExpr arrayExpr) {
             int size = arrayExpr.getArrayLiteral().getArrayElement().size();
             symbolTable.define(new Symbol(name, "array", size));
+        } else {
+            symbolTable.define(new Symbol(name, "variable"));
         }
     }
-
-    private void checkDuplicateClassNames(AngularFile angularFile) throws IOException {
-        Set<String> classNames = new HashSet<>();
-
-        for (ClassDeclaration classDecl : angularFile.getClassDeclaration()) {
-            String className = classDecl.getID();
-
-            if (!classNames.add(className)) {
-                //System.err.printf("Semantic Error: Duplicate class name '%s' found.%n", className);
-                writer.write(String.format("Semantic Error: Duplicate class name '%s' found.%n", className));
-                SymbolTablePrinter.print(symbolTable, List.of(className));
-                symbolTable.remove(className);
-            } else {
-                symbolTable.define(new Symbol(className, "class"));
-            }
-        }
-    }
-
-    private void checkDuplicateVariables(ClassDeclaration classDecl) throws IOException {
-        for (ClassMember member : classDecl.getClassMember()) {
-            VariableDeclaration varDecl = member.getVariableDeclaration();
-            if (varDecl != null) {
-                String varName = varDecl.getID();
-
-                if (symbolTable.contains(varName)) {
-                    String errorMsg = String.format("Semantic Error: Duplicate variable '%s' in class '%s'%n", varName, classDecl.getID());
-                    //System.err.print(errorMsg);
-                    writer.write(errorMsg);
-                    SymbolTablePrinter.print(symbolTable, List.of(varName));
-                } else {
-                    symbolTable.define(new Symbol(varName, "variable"));
-                }
-            }
-        }
-    }
-
-    private void checkTemplateExistence(Decorator decorator) throws IOException {
-        boolean hasTemplate = decorator.getObjectLiteral().getObjectField().stream()
-                .anyMatch(field -> field instanceof TemplateField);
-
-        if (!hasTemplate) {
-            String errorMsg = "Semantic Error: Missing 'template' field in @Component decorator.\n";
-            //System.err.print(errorMsg);
-            writer.write(errorMsg);
-
-            symbolTable.define(new Symbol("template", "decorator_field"));
-            SymbolTablePrinter.print(symbolTable, List.of("template"));
-            symbolTable.remove("template");
-        }
-    }
-
-    private void checkUndefinedIdentifiers(VariableDeclaration varDecl) throws IOException {
-        Expression expr = varDecl.getExpression();
-
-        if (expr instanceof IdentifierExpr identifierExpr) {
-            List<String> ids = identifierExpr.getId();
-            int startIndex = (ids.size() > 0 && (ids.get(0).equals("this") || ids.get(0).equals("super"))) ? 1 : 0;
-
-            for (int i = startIndex; i < ids.size(); i++) {
-                String id = ids.get(i);
-                if (!symbolTable.contains(id)) {
-                    String errorMsg = String.format("Semantic Error: Variable '%s' used but not defined.%n", id);
-                    writer.write(errorMsg);
-                    symbolTable.define(new Symbol(id, "undefined_variable"));
-                    SymbolTablePrinter.print(symbolTable, List.of(id));
-                    symbolTable.remove(id);
-                }
-            }
-        }
-    }
-
-    private void checkVariableDeclarationForErrors(VariableDeclaration varDecl) throws IOException {
-        Expression expr = varDecl.getExpression();
-
-        if (expr instanceof IdentifierExpr identifierExpr) {
-            var ids = identifierExpr.getId();
-            var literals = identifierExpr.getLiteral();
-
-            if (ids.size() >= 2 && !literals.isEmpty()) {
-                String varName = ids.get(1);
-                String indexStr = literals.get(0).getNumber();
-                Symbol symbol = symbolTable.resolve(varName);
-
-                if (symbol != null && "array".equals(symbol.getType())) {
-                    int index = Integer.parseInt(indexStr);
-                    if (index >= symbol.getArrayLength()) {
-                        String errorMsg = String.format(
-                                "Semantic Error: Index %d out of bounds for array '%s' with length %d%n",
-                                index, varName, symbol.getArrayLength()
-                        );
-                        // System.err.print(errorMsg);
-                        writer.write(errorMsg);
-
-                        SymbolTablePrinter.print(symbolTable, List.of(symbol.getName()));
-                    } else {
-                        symbolTable.remove(symbol.getName());
-                    }
-                }
-            }
-        }
-    }
-
 }

@@ -3,10 +3,8 @@ Semantic Error: Duplicate variable 'selectedProduct' in class 'AppComponent'
 Semantic Error: Index 3 out of bounds for array 'products' with length 3
 Semantic Error: Variable 'nn' used but not defined.
 Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Duplicate class name 'AppComponent' found.
-Semantic Error: Duplicate variable 'selectedProduct' in class 'AppComponent'
-Semantic Error: Index 3 out of bounds for array 'products' with length 3
-Semantic Error: Variable 'nn' used but not defined.
+
+Semantic Error: Variable 'ppp' used but not defined.
 Semantic Error: Missing 'template' field in @Component decorator.
 Semantic Error: Duplicate class name 'AppComponent' found.
 Semantic Error: Duplicate variable 'selectedProduct' in class 'AppComponent'
