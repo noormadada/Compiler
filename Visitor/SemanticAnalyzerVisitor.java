@@ -21,26 +21,27 @@ public class SemanticAnalyzerVisitor {
             new ClassNameChecker(writer, symbolTable).check(angularFile);
 
             for (ClassDeclaration classDecl : angularFile.getClassDeclaration()) {
+
                 // التحقق من المتغيرات المكررة داخل الكلاس
                 new DuplicateVariableChecker(writer, symbolTable).check(classDecl);
 
+                // تعريف المتغيرات في جدول الرموز
                 for (ClassMember member : classDecl.getClassMember()) {
                     if (member.getVariableDeclaration() != null) {
-                        // تعريف المتغير في جدول الرموز
                         defineVariable(member.getVariableDeclaration());
                     }
                 }
 
+                // التحقق من قواعد إضافية لكل متغير
                 for (ClassMember member : classDecl.getClassMember()) {
                     if (member.getVariableDeclaration() != null) {
                         VariableDeclaration var = member.getVariableDeclaration();
 
-                        // التحقق من أخطاء المؤشرات في المصفوفات
+                        // التحقق من مؤشرات المصفوفة
                         new ArrayIndexChecker(writer, symbolTable).check(var);
 
                         // التحقق من المعرفات غير المعرفة
                         new UndefinedIdentifierChecker(writer, symbolTable).check(var);
-
 
                         Expression expr = var.getExpression();
                         if (expr instanceof CssExpr cssExpr) {
@@ -53,13 +54,23 @@ public class SemanticAnalyzerVisitor {
 
             // التحقق من وجود template في @Component
             if (angularFile.getDecorator() != null) {
-                new TemplateFieldChecker(writer, symbolTable)
-                        .check(angularFile.getDecorator());
+                new TemplateFieldChecker(writer, symbolTable).check(angularFile.getDecorator());
+
+                // التحقق من أخطاء CSS ضمن styles
+                ObjectLiteral objectLiteral = angularFile.getDecorator().getObjectLiteral();
+                for (ObjectField field : objectLiteral.getObjectField()) {
+                    if (field instanceof StylesField stylesField) {
+                        StyleArray styleArray = stylesField.getStyleArray();
+                        for (CssLiteral cssLiteral : styleArray.getCssLiteral()) {
+                            new InvalidCssPropertyNameChecker(writer, symbolTable).check(cssLiteral);
+                        }
+                    }
+                }
             }
         }
     }
 
-    // ✅ هذا التابع مسؤول عن تسجيل المتغيرات في جدول الرموز
+    // تعريف المتغيرات (مصفوفة أو متغير عادي)
     private void defineVariable(VariableDeclaration varDecl) {
         String name = varDecl.getID();
         Expression expr = varDecl.getExpression();

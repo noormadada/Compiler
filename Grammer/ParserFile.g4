@@ -1,4 +1,5 @@
 
+// ParserFile.g4
 parser grammar ParserFile;
 
 options {
@@ -51,8 +52,8 @@ expression
     : SEMI? THIS                                             # ThisExpr
     | THIS DOT ID                                            # ThisPropertyExpr
     | THIS DOT ID LPAREN (expression (COMMA expression)*)? RPAREN # ThisCallExpr
-    | ID ((DOT ID (AS)?) | (LSQUARE expression RSQUARE))*          # IdentifierExpr
-    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID        # IdentifierExpr2
+    | ID ((DOT ID(AS)?) | (LSQUARE expression RSQUARE))*          # IdentifierExpr
+    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID                      # IdentifierExpr2
     | ID GT MINUS NUMBER                                     # IdentifierExpr3
     | literal                                                # LiteralExpr
     | templateLiteral                                        # TemplateExpr
@@ -265,7 +266,7 @@ ifStatement
 constDeclaration
     : CONST ID ASSIGN expression SEMI?
     ;
-   constExportStatement
-        : EXPORT CONST ID COLON type ASSIGN expression SEMI
-        ;
+constExportStatement
+    : EXPORT CONST ID COLON type ASSIGN expression SEMI
+    ;
 

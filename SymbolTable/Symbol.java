@@ -7,7 +7,7 @@ public class Symbol {
     private final String name;
     private final String type;
     private final int arrayLength;
-    private final List<String> properties; // NEW
+    private final List<String> properties;
 
     public Symbol(String name, String type) {
         this(name, type, -1, null);

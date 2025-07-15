@@ -28,23 +28,31 @@ public class ArrayIndexChecker {
             List<String> ids = identifierExpr.getId();
             List<Literal> literals = identifierExpr.getLiteral();
 
-            if (ids.size() >= 2 && !literals.isEmpty()) {
-                String varName = ids.get(1);
+
+
+            if (!ids.isEmpty() && !literals.isEmpty()) {
+                String varName = ids.get(ids.size() - 1);
                 String indexStr = literals.get(0).getNumber();
                 Symbol symbol = symbolTable.resolve(varName);
 
                 if (symbol != null && "array".equals(symbol.getType())) {
-                    int index = Integer.parseInt(indexStr);
-                    if (index >= symbol.getArrayLength()) {
+                    try {
+                        int index = Integer.parseInt(indexStr);
+                        if (index < 0 || index >= symbol.getArrayLength()) {
+                            writer.write(String.format(
+                                    "Semantic Error: Index %d out of bounds for array '%s' with length %d%n",
+                                    index, varName, symbol.getArrayLength()));
+                            SymbolTablePrinter.print(symbolTable, List.of(varName));
+                        }
+                    } catch (NumberFormatException e) {
                         writer.write(String.format(
-                                "Semantic Error: Index %d out of bounds for array '%s' with length %d%n",
-                                index, varName, symbol.getArrayLength()));
-                        SymbolTablePrinter.print(symbolTable, List.of(varName));
-                    } else {
-                        symbolTable.remove(varName);
+                                "Semantic Error: Invalid array index '%s' for array '%s'%n",
+                                indexStr, varName));
                     }
                 }
             }
+
         }
     }
+
 }
