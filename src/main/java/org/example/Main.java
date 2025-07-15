@@ -15,7 +15,7 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String source = "Errors/errors.txt";
+        String source = "tests/my-app.txt";
         CharStream cs = fromFileName(source);
 
         gen.LexerFile lexerFiler = new gen.LexerFile(cs);
