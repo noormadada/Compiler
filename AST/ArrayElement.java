@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayElement implements AST_Node {
-    List<ObjectFieldInArray> objectFieldInArrayList=new ArrayList<>();
+    Expression expression;
 
-    public List<ObjectFieldInArray> getObjectFieldInArrayList() {
-        return objectFieldInArrayList;
+
+    public Expression getExpression() {
+        return expression;
     }
 
-    public void setObjectFieldInArrayList(List<ObjectFieldInArray> objectFieldInArrayList) {
-        this.objectFieldInArrayList = objectFieldInArrayList;
+    public void setExpression(Expression expression) {
+        this.expression = expression;
     }
-
     @Override
     public String toString() {
         return "ArrayElement{" +
-                "objectFieldInArrayList=" + objectFieldInArrayList +
+                "expression=" + expression +
                 '}';
     }
 }

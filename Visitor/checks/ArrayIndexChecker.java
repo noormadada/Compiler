@@ -1,4 +1,4 @@
-package Visitor.checks;
+/*package Visitor.checks;
 
 import AST.Expression;
 import AST.IdentifierExpr;
@@ -56,3 +56,4 @@ public class ArrayIndexChecker {
     }
 
 }
+*/

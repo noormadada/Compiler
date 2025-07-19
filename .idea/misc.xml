@@ -6,13 +6,8 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/Grammer/LexerFile.g4" />
           <option name="autoGen" value="true" />
-<<<<<<< HEAD
-          <option name="outputDir" value="C:\Users\Noor\IdeaProjects\compiler" />
-          <option name="libDir" value="C:\Users\Noor\IdeaProjects\compiler" />
-=======
-          <option name="outputDir" value="C:\Users\USER\Desktop\Compiler" />
-          <option name="libDir" value="C:\Users\USER\Desktop\Compiler" />
->>>>>>> fe682dab5097023a04be0a386f8e3004ea508e51
+          <option name="outputDir" value="D:\Compiler_git\Compiler" />
+          <option name="libDir" value="D:\Compiler_git\Compiler" />
           <option name="encoding" value="" />
           <option name="pkg" value="gen" />
           <option name="language" value="" />
@@ -21,13 +16,8 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/Grammer/ParserFile.g4" />
           <option name="autoGen" value="true" />
-<<<<<<< HEAD
-          <option name="outputDir" value="C:\Users\Noor\IdeaProjects\compiler" />
-          <option name="libDir" value="C:\Users\Noor\IdeaProjects\compiler" />
-=======
-          <option name="outputDir" value="C:\Users\USER\Desktop\Compiler" />
-          <option name="libDir" value="C:\Users\USER\Desktop\Compiler" />
->>>>>>> fe682dab5097023a04be0a386f8e3004ea508e51
+          <option name="outputDir" value="D:\Compiler_git\Compiler" />
+          <option name="libDir" value="D:\Compiler_git\Compiler" />
           <option name="encoding" value="" />
           <option name="pkg" value="gen" />
           <option name="language" value="" />
@@ -44,7 +34,5 @@
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22" project-jdk-type="JavaSDK" />
 </project>

@@ -2,7 +2,6 @@ package org.example;
 
 import AST.AngularFile;
 import Visitor.BaseVisitor;
-import Visitor.SemanticAnalyzerVisitor;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -25,8 +24,10 @@ public class Main {
         ParseTree tree = myLanguageParser.angularFile();
         AngularFile doc = (AngularFile) new BaseVisitor().visit(tree);
 
-        SemanticAnalyzerVisitor semanticAnalyzer = new SemanticAnalyzerVisitor();
-        semanticAnalyzer.analyze(doc);
+        System.out.print(doc);
+
+        //SemanticAnalyzerVisitor semanticAnalyzer = new SemanticAnalyzerVisitor();
+        //semanticAnalyzer.analyze(doc);
 
 
 

@@ -14,10 +14,15 @@ List<ArrayElement> arrayElement=new ArrayList<>();
         this.arrayElement = arrayElement;
     }
 
+
     @Override
     public String toString() {
-        return "ArrayLiteral{" +
-                "arrayElement=" + arrayElement +
-                '}';
+
+        if(arrayElement.isEmpty())
+            return "";
+        else
+            return "ArrayLiteral{" +
+                    "\n arrayElement= " + arrayElement +
+                    "\n }";
     }
 }

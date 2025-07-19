@@ -4,6 +4,7 @@ public class InterpolationExpr implements AST_Node{
     String InterpolationId;
     String InterpolationString;
     String InterpolationNumber;
+    InterpolationFullExpr interpolationFullExpr;
 
     public String getInterpolationId() {
         return InterpolationId;
@@ -29,6 +30,14 @@ public class InterpolationExpr implements AST_Node{
         InterpolationNumber = interpolationNumber;
     }
 
+    public InterpolationFullExpr getInterpolationFullExpr() {
+        return interpolationFullExpr;
+    }
+
+    public void setInterpolationFullExpr(InterpolationFullExpr interpolationFullExpr) {
+        this.interpolationFullExpr = interpolationFullExpr;
+    }
+
     @Override
     public String toString() {
         if(InterpolationId!=null)
@@ -41,7 +50,11 @@ public class InterpolationExpr implements AST_Node{
             return "InterpolationExpr{" +
                     "InterpolationString='" + InterpolationString + '\'' +
                     '}';
-        }else {
+        } else if (interpolationFullExpr!=null) {
+            return "InterpolationExpr{" +
+                    "interpolationFullExpr='" + interpolationFullExpr + '\'' +
+                    '}';
+        } else {
             return "InterpolationExpr{" +
                     "InterpolationNumber='" + InterpolationNumber + '\'' +
                     '}';

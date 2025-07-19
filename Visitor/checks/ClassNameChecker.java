@@ -1,4 +1,4 @@
-package Visitor.checks;
+/*package Visitor.checks;
 
 import AST.AngularFile;
 import AST.ClassDeclaration;
@@ -25,7 +25,7 @@ public class ClassNameChecker {
         Set<String> classNames = new HashSet<>();
 
         for (ClassDeclaration classDecl : angularFile.getClassDeclaration()) {
-            String name = classDecl.getID();
+            String name = String.valueOf(classDecl.getID());
             if (!classNames.add(name)) {
                 writer.write("Semantic Error: Duplicate class name '" + name + "' found.\n");
                 SymbolTablePrinter.print(symbolTable, List.of(name));
@@ -36,3 +36,4 @@ public class ClassNameChecker {
         }
     }
 }
+*/

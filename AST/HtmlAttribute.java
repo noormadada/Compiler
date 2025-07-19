@@ -64,44 +64,41 @@ public class HtmlAttribute implements AST_Node {
     public void setAttributeValue(AttributeValue attributeValue) {
         this.attributeValue = attributeValue;
     }
+
     @Override
     public String toString() {
         if (TEMPLATE_ID != null) {
             return "HtmlAttribute{" +
                     "\n TEMPLATE_ID= " + TEMPLATE_ID +
-                    "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS +
-
-                    "\n attributeValue=" + attributeValue +
+                    (TEMPLATE_EQUALS != null ? "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS : "") +
+                    (attributeValue != null ? "\n attributeValue= " + attributeValue : "") +
                     "\n }";
         }
         if (ANGULAR_PROPERTY_BINDING != null) {
             return "HtmlAttribute{" +
                     "\n ANGULAR_PROPERTY_BINDING= " + ANGULAR_PROPERTY_BINDING +
-                    "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS +
-
-                    "\n attributeValue=" + attributeValue +
+                    (TEMPLATE_EQUALS != null ? "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS : "") +
+                    (attributeValue != null ? "\n attributeValue= " + attributeValue : "") +
                     "\n }";
         }
         if (ANGULAR_EVENT_BINDING != null) {
             return "HtmlAttribute{" +
-                    "\n ANGULAR_PROPERTY_BINDING= " + ANGULAR_EVENT_BINDING +
-                    "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS +
-
-                    "\n attributeValue=" + attributeValue +
+                    "\n ANGULAR_EVENT_BINDING= " + ANGULAR_EVENT_BINDING +
+                    (TEMPLATE_EQUALS != null ? "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS : "") +
+                    (attributeValue != null ? "\n attributeValue= " + attributeValue : "") +
                     "\n }";
         }
         if (ANGULAR_TWO_WAY_BINDING != null) {
             return "HtmlAttribute{" +
-                    "\n ANGULAR_PROPERTY_BINDING= " + ANGULAR_TWO_WAY_BINDING +
-                    "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS +
-
-                    "\n attributeValue=" + attributeValue +
+                    "\n ANGULAR_TWO_WAY_BINDING= " + ANGULAR_TWO_WAY_BINDING +
+                    (TEMPLATE_EQUALS != null ? "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS : "") +
+                    (attributeValue != null ? "\n attributeValue= " + attributeValue : "") +
                     "\n }";
         }
         return "HtmlAttribute{" +
-                "\n ANGULAR_PROPERTY_BINDING= " + ANGULAR_STRUCTURAL_DIRECTIVE +
-                "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS +
-                "\n attributeValue=" + attributeValue +
+                "\n ANGULAR_STRUCTURAL_DIRECTIVE= " + ANGULAR_STRUCTURAL_DIRECTIVE +
+                (TEMPLATE_EQUALS != null ? "\n TEMPLATE_EQUALS= " + TEMPLATE_EQUALS : "") +
+                (attributeValue != null ? "\n attributeValue= " + attributeValue : "") +
                 "\n }";
     }
 }

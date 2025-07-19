@@ -6,363 +6,621 @@ import gen.ParserFileBaseVisitor;
 
 
 public class BaseVisitor extends ParserFileBaseVisitor {
-    String name;
     @Override
     public AngularFile visitAngularFile(ParserFile.AngularFileContext ctx) {
-        AngularFile angularFile=new AngularFile();
-        if(!ctx.importStatement().isEmpty())
-        {
-            for (int i = 0; i < ctx.importStatement().size(); i++) {
+        AngularFile angularFile = new AngularFile();
+        if(!ctx.importStatement().isEmpty()){
+            for (int i = 0; i <ctx.importStatement().size() ; i++) {
                 angularFile.getImportstatement().add(visitImportStatement(ctx.importStatement(i)));
             }
         }
-        for (int i = 0; i < ctx.classDeclaration().size(); i++) {
-            angularFile.getClassDeclaration().add(visitClassDeclaration(ctx.classDeclaration(i)));
+        if(!ctx.decorator().isEmpty()){
+            for (int i = 0; i <ctx.decorator().size(); i++) {
+                angularFile.getDecorator().add(visitDecorator(ctx.decorator(i)));
+            }
         }
-        angularFile.setDecorator(visitDecorator(ctx.decorator()));
+        if(!ctx.classDeclaration().isEmpty()){
+            for (int i = 0; i <ctx.classDeclaration().size(); i++) {
+                angularFile.getClassDeclaration().add(visitClassDeclaration(ctx.classDeclaration(i)));
+            }
+        }
+        if(!ctx.constExportStatement().isEmpty()){
+            for (int i = 0; i <ctx.constExportStatement().size(); i++) {
+                angularFile.getConstExportStatement().add(visitConstExportStatement(ctx.constExportStatement(i)));
+            }
+        }
+        if(!ctx.expressionStatement().isEmpty()){
+            for (int i = 0; i <ctx.expressionStatement().size(); i++) {
+                angularFile.getExpressionStatement().add(visitExpressionStatement(ctx.expressionStatement(i)));
+            }
+        }
 
         return angularFile;
     }
 
     @Override
-    public ArrayElement visitArrayElement(ParserFile.ArrayElementContext ctx) {
-        ArrayElement arrayElement=new ArrayElement();
-        for (int i = 0; i < ctx.objectFieldInArray().size(); i++) {
-            arrayElement.getObjectFieldInArrayList().add(visitObjectFieldInArray(ctx.objectFieldInArray(i)));
+    public ImportStatement visitImportStatement(ParserFile.ImportStatementContext ctx) {
+        ImportStatement importStatement = new ImportStatement();
+        if(ctx.idList()!=null){
+            importStatement.setIdList(visitIdList(ctx.idList()));
         }
-        return arrayElement;
+        importStatement.setIMPORT(ctx.IMPORT().getText());
+        importStatement.setFROM(ctx.FROM().getText());
+        importStatement.setSTRING_LITERAL(ctx.STRING_LITERAL().getText());
+
+        return  importStatement;
+
+    }
+
+    @Override
+    public IdList visitIdList(ParserFile.IdListContext ctx) {
+        IdList idList = new IdList();
+        for (int i = 0; i < ctx.ID().size(); i++) {
+         idList.getIdList().add(String.valueOf(ctx.ID().get(i)));
+        }
+
+        return idList;
+    }
+
+    @Override
+    public Decorator visitDecorator(ParserFile.DecoratorContext ctx) {
+        Decorator decorator = new Decorator();
+        decorator.setAT(ctx.AT().getText());
+        decorator.setID(ctx.ID().getText());
+        if(ctx.objectLiteral()!=null){
+            decorator.setObjectLiteral(visitObjectLiteral(ctx.objectLiteral()));
+        }
+
+        return  decorator;
+
+    }
+
+    @Override
+    public ObjectLiteral visitObjectLiteral(ParserFile.ObjectLiteralContext ctx) {
+        ObjectLiteral objectLiteral = new ObjectLiteral();
+        if(!ctx.objectField().isEmpty()){
+            for (int i = 0; i < ctx.objectField().size(); i++) {
+                objectLiteral.getObjectField().add((ObjectField)visit(ctx.objectField().get(i)));
+            }
+        }
+        return objectLiteral;
+    }
+
+    @Override
+    public TemplateField visitTemplateField(ParserFile.TemplateFieldContext ctx) {
+        TemplateField templateField = new TemplateField();
+        if(ctx.templateLiteral()!=null){
+         templateField.setTemplateLiteral(visitTemplateLiteral(ctx.templateLiteral()));
+        }
+        templateField.setTEMPLATEE(ctx.TEMPLATEE().getText());
+
+        return templateField;
+    }
+
+    @Override
+    public StylesField visitStylesField(ParserFile.StylesFieldContext ctx) {
+        StylesField stylesField = new StylesField();
+        if(ctx.styleArray()!=null){
+            stylesField.setStyleArray(visitStyleArray(ctx.styleArray()));
+
+        }
+        stylesField.setSTYLES(ctx.STYLES().getText());
+
+        return stylesField;
+    }
+
+    @Override
+    public GenericField visitGenericField(ParserFile.GenericFieldContext ctx) {
+        GenericField genericField = new GenericField();
+        if(ctx.expression()!=null){
+            genericField.setExpression((Expression)visit(ctx.expression()) );
+        }
+        genericField.setID(ctx.ID().getText());
+        return  genericField;
+    }
+
+    @Override
+    public StyleArray visitStyleArray(ParserFile.StyleArrayContext ctx) {
+        StyleArray styleArray = new StyleArray();
+        if(ctx.cssLiteral()!=null){
+            for (int i = 0; i < ctx.cssLiteral().size(); i++) {
+                styleArray.getCssLiteral().add(visitCssLiteral(ctx.cssLiteral(i)));
+            }
+        }
+        return styleArray;
+    }
+
+    @Override
+    public SpreadField visitSpreadField(ParserFile.SpreadFieldContext ctx) {
+        SpreadField spreadField = new SpreadField();
+        if(ctx.ID()!=null){
+            spreadField.setId(ctx.ID().getText());
+        }
+        if(ctx.objectField()!=null){
+            spreadField.setObjectField((ObjectField)visit(ctx.objectField()) );
+        }
+        return spreadField;
+    }
+
+    @Override
+    public SpreadObjectExpr visitSpreadObjectExpr(ParserFile.SpreadObjectExprContext ctx) {
+
+        SpreadObjectExpr spreadObjectExpr = new SpreadObjectExpr();
+
+        if(ctx.objectField().isEmpty()){
+            for (int i = 0; i < ctx.objectField().size(); i++) {
+              spreadObjectExpr.getObjectFieldList().add((ObjectField)visit(ctx.objectField(i)) );
+            }
+        }
+
+        if(ctx.spreadField().isEmpty()){
+            for (int i = 0; i < ctx.spreadField().size(); i++) {
+                spreadObjectExpr.getSpreadFieldList().add(visitSpreadField(ctx.spreadField(i)) );
+            }
+        }
+        return spreadObjectExpr;
+
+    }
+
+    @Override
+    public ArrayAccessExpr visitArrayAccessExpr(ParserFile.ArrayAccessExprContext ctx) {
+        ArrayAccessExpr arrayAccessExpr = new ArrayAccessExpr();
+
+        if(ctx.expression().isEmpty()){
+            for (int i = 0; i < ctx.expression().size(); i++) {
+
+                arrayAccessExpr.getExpressionList().add((Expression)visit(ctx.expression(i)));
+            }
+        }
+        return arrayAccessExpr;
+    }
+
+    @Override
+    public BinaryExpr visitBinaryExpr(ParserFile.BinaryExprContext ctx) {
+
+        BinaryExpr binaryExpr = new BinaryExpr();
+        if(ctx.expression().isEmpty()){
+            for (int i = 0; i < ctx.expression().size(); i++) {
+
+                binaryExpr.getExpressionList().add((Expression)visit(ctx.expression(i)));
+            }
+        }
+        return binaryExpr;
+    }
+
+
+    @Override
+    public IdentifierExpr3 visitIdentifierExpr3(ParserFile.IdentifierExpr3Context ctx) {
+        IdentifierExpr3 identifierExpr3 = new IdentifierExpr3() ;
+
+        identifierExpr3.setId(ctx.ID().getText());
+        identifierExpr3.setNumber(ctx.NUMBER().getText());
+        return  identifierExpr3;
+    }
+
+    @Override
+    public IdentifierExpr2 visitIdentifierExpr2(ParserFile.IdentifierExpr2Context ctx) {
+
+        IdentifierExpr2 identifierExpr2 = new IdentifierExpr2();
+
+        for (int i = 0; i < ctx.ID().size(); i++) {
+            identifierExpr2.getId().add(String.valueOf(ctx.ID().get(i)));
+        }
+        return  identifierExpr2;
+
+    }
+
+    @Override
+    public CssExpr visitCssExpr(ParserFile.CssExprContext ctx) {
+        CssExpr cssExpr = new CssExpr();
+        if(ctx.cssLiteral()!=null){
+            cssExpr.setCssLiteral(visitCssLiteral(ctx.cssLiteral()));
+        }
+
+        return cssExpr;
+    }
+
+    @Override
+    public UnaryExpr visitUnaryExpr(ParserFile.UnaryExprContext ctx) {
+        UnaryExpr unaryExpr = new UnaryExpr();
+        if(ctx.expression()!=null){
+            unaryExpr.setExpression((Expression)visit(ctx.expression()) );
+        }
+        return unaryExpr;
+    }
+
+    @Override
+    public PropertyAccess visitPropertyAccess(ParserFile.PropertyAccessContext ctx) {
+        PropertyAccess propertyAccess = new PropertyAccess();
+
+        if(ctx.expression()!=null){
+            propertyAccess.setExpression((Expression)visit(ctx.expression()) );
+        }
+        propertyAccess.setId(ctx.ID().getText());
+
+        return propertyAccess;
     }
 
     @Override
     public ArrayExpr visitArrayExpr(ParserFile.ArrayExprContext ctx) {
-        ArrayExpr arrayExpr=new ArrayExpr();
-        arrayExpr.setArrayLiteral(visitArrayLiteral(ctx.arrayLiteral()));
-        return  arrayExpr;
-    }
-
-    @Override
-    public ArrayLiteral visitArrayLiteral(ParserFile.ArrayLiteralContext ctx) {
-        ArrayLiteral arrayLiteral=new ArrayLiteral();
-
-        for (int i = 0; i < ctx.arrayElement().size(); i++) {
-            arrayLiteral.getArrayElement().add(visitArrayElement(ctx.arrayElement(i)));
+        ArrayExpr arrayExpr = new ArrayExpr();
+        if(ctx.arrayLiteral()!=null){
+            arrayExpr.setArrayLiteral(visitArrayLiteral(ctx.arrayLiteral()));
         }
-        return  arrayLiteral;
+        return arrayExpr;
     }
 
     @Override
-    public AttributeValue visitAttributeValue(ParserFile.AttributeValueContext ctx) {
+    public ObjectExpr visitObjectExpr(ParserFile.ObjectExprContext ctx) {
 
-        AttributeValue attributeValue=new AttributeValue();
-        if(ctx.interpolation()!=null)
-        {
-            attributeValue.setInterpolation(visitInterpolation(ctx.interpolation()));
-        }if(ctx.TEMPLATE_ID()!=null)
-        {
-            attributeValue.setTEMPLATE_ID(ctx.TEMPLATE_ID().getText());
-
-        }if(ctx.TEMPLATE_STRING()!=null){
-            attributeValue.setTEMPLATE_STRING(ctx.TEMPLATE_STRING().getText());
+        ObjectExpr objectExpr = new ObjectExpr();
+        if(ctx.objectLiteral()!=null){
+            objectExpr.setObjectLiteral(visitObjectLiteral(ctx.objectLiteral()));
         }
-        return attributeValue;
+        return objectExpr;
     }
 
     @Override
-    public BlockExpr1 visitBlockExpr1(ParserFile.BlockExpr1Context ctx) {
-        BlockExpr1 blockExpr1=new BlockExpr1();
+    public IdentifierExpr visitIdentifierExpr(ParserFile.IdentifierExprContext ctx) {
+        IdentifierExpr identifierExpr = new IdentifierExpr();
         for (int i = 0; i < ctx.ID().size(); i++) {
-           blockExpr1.getIdList().add(String.valueOf(ctx.ID().get(i)));
+            identifierExpr.getId().add(String.valueOf(ctx.ID().get(i)));
         }
-        if(ctx.NUMBER()!=null) {
-            blockExpr1.setNumber(ctx.NUMBER().getText());
-        }
-        return  blockExpr1;
-    }
+        for (int i = 0; i < ctx.AS().size(); i++) {
+            if(ctx.AS()!=null){
 
-    @Override
-    public BlockExpr3 visitBlockExpr3(ParserFile.BlockExpr3Context ctx) {
-        BlockExpr3 blockExpr3=new BlockExpr3();
-        for (int i = 0; i <ctx.ID().size() ; i++) {
-           blockExpr3.getIdList().add(String.valueOf(ctx.ID().get(i)));
-        }
-        return  blockExpr3;
-    }
-
-    @Override
-    public BlockExpr2 visitBlockExpr2(ParserFile.BlockExpr2Context ctx) {
-        BlockExpr2 blockExpr2=new BlockExpr2();
-        for (int i = 0; i < ctx.ID().size(); i++) {
-            blockExpr2.getIdList().add(String.valueOf(ctx.ID().get(i)));
-        }
-        blockExpr2.setStringLiteral(ctx.STRING_LITERAL().getText());
-        return  blockExpr2;
-    }
-
-    @Override
-    public ClassDeclaration visitClassDeclaration(ParserFile.ClassDeclarationContext ctx) {
-        ClassDeclaration classDeclaration=new ClassDeclaration();
-
-        if(!ctx.classMember().isEmpty()){
-            for (int i = 0; i < ctx.classMember().size(); i++) {
-                classDeclaration.getClassMember().add(visitClassMember(ctx.classMember(i)));
+                identifierExpr.getAs().add(String.valueOf(ctx.AS().get(i)));
             }
         }
-        classDeclaration.setID(ctx.ID().getText());
-        classDeclaration.setEXPORT(ctx.EXPORT().getText());
-        classDeclaration.setCLASS(ctx.CLASS().getText());
-        return classDeclaration;
+
+        if(!ctx.expression().isEmpty()){
+            for (int i = 0; i < ctx.expression().size(); i++) {
+                identifierExpr.getExpressionList().add((Expression)visit(ctx.expression(i)));
+
+            }
+
+        }
+ return  identifierExpr;
+
+
     }
 
     @Override
-    public ClassMember visitClassMember(ParserFile.ClassMemberContext ctx) {
-        ClassMember classMember=new ClassMember();
-        if(ctx.variableDeclaration()!=null)
-        {
-            classMember.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
+    public TemplateExpr visitTemplateExpr(ParserFile.TemplateExprContext ctx) {
+        TemplateExpr templateExpr = new TemplateExpr();
+
+        if(ctx.templateLiteral()!=null){
+            templateExpr.setTemplateLiteral(visitTemplateLiteral(ctx.templateLiteral()));
         }
-        if(ctx.functionDeclaration()!=null)
-        {
-            classMember.setFunctionDeclaration(visitFunctionDeclaration(ctx.functionDeclaration()));
+        return templateExpr;
+    }
+
+
+
+    @Override
+    public LiteralExpr visitLiteralExpr(ParserFile.LiteralExprContext ctx) {
+        LiteralExpr literalExpr = new LiteralExpr();
+
+        if(ctx.literal()!=null){
+            literalExpr.setLiteral(visitLiteral(ctx.literal()));
         }
-        return  classMember;
+       return  literalExpr;
+    }
+
+    @Override
+    public ParenthesizedExpr visitParenthesizedExpr(ParserFile.ParenthesizedExprContext ctx) {
+
+        ParenthesizedExpr parenthesizedExpr = new ParenthesizedExpr();
+        if(ctx.expression()!=null){
+            parenthesizedExpr.setExpression((Expression)visit(ctx.expression()) );
+        }
+
+        return parenthesizedExpr;
+    }
+
+    @Override
+    public CallExpr visitCallExpr(ParserFile.CallExprContext ctx) {
+
+        CallExpr callExpr = new CallExpr();
+
+        if(ctx.expression().isEmpty()){
+            for (int i = 0; i < ctx.expression().size(); i++) {
+
+                callExpr.getExpressionList().add((Expression)visit(ctx.expression(i)));
+            }
+        }
+        return callExpr;
+    }
+
+    @Override
+    public VariableDeclaration visitVariableDeclaration(ParserFile.VariableDeclarationContext ctx) {
+        VariableDeclaration variableDeclaration=new VariableDeclaration();
+        if(ctx.PRIVATE()!=null){
+            variableDeclaration.setPrivateWord(ctx.PRIVATE().getText());
+        }
+        variableDeclaration.setID(ctx.ID().getText());
+        if(ctx.type()!=null){
+            variableDeclaration.setType(visitType(ctx.type()));
+        }
+        if(ctx.expression()!=null){
+            variableDeclaration.setExpression((Expression) visit(ctx.expression()));
+        }
+        return variableDeclaration;
+    }
+
+    @Override
+    public Type visitType(ParserFile.TypeContext ctx) {
+        Type type=new Type();
+        if(ctx.ID()!=null){
+            type.setId(ctx.ID().getText());
+        }
+        if(ctx.ANY()!=null){
+            type.setAny(ctx.ANY().getText());
+        }
+        if(ctx.VOID()!=null){
+            type.setVoidWord(ctx.VOID().getText());
+        }
+        return  type;
+    }
+
+    @Override
+    public ThisPropertyExpr visitThisPropertyExpr(ParserFile.ThisPropertyExprContext ctx) {
+        ThisPropertyExpr thisPropertyExpr=new ThisPropertyExpr();
+        if(ctx.ID()!=null){
+            thisPropertyExpr.setId(ctx.ID().getText());
+        }
+        if(ctx.THIS()!=null){
+            thisPropertyExpr.setThis(ctx.THIS().getText());
+        }
+        return thisPropertyExpr;
+    }
+
+    @Override
+    public ThisExpr visitThisExpr(ParserFile.ThisExprContext ctx) {
+        ThisExpr thisExpr=new ThisExpr();
+        thisExpr.setThis(ctx.THIS().getText());
+        return  thisExpr;
+    }
+
+    @Override
+    public ThisCallExpr visitThisCallExpr(ParserFile.ThisCallExprContext ctx) {
+        ThisCallExpr thisCallExpr=new ThisCallExpr();
+        thisCallExpr.setThis(ctx.THIS().getText());
+        thisCallExpr.setId(ctx.ID().getText());
+        if(!ctx.expression().isEmpty()){
+            for (int i = 0; i < ctx.expression().size(); i++) {
+                thisCallExpr.getExpressionList().add((Expression) visit(ctx.expression().get(i)));
+            }
+        }
+        return thisCallExpr;
+    }
+
+    @Override
+    public ConstExportStatement visitConstExportStatement(ParserFile.ConstExportStatementContext ctx) {
+        ConstExportStatement constExportStatement=new ConstExportStatement();
+        constExportStatement.setEXPORT(ctx.EXPORT().getText());
+        constExportStatement.setCONST(ctx.CONST().getText());
+        constExportStatement.setID(ctx.ID().getText());
+        constExportStatement.setType(visitType(ctx.type()));
+        constExportStatement.setExpression((Expression) visit(ctx.expression()));
+
+        return  constExportStatement;
+    }
+
+    @Override
+    public ConstDeclaration visitConstDeclaration(ParserFile.ConstDeclarationContext ctx) {
+        ConstDeclaration constDeclaration=new ConstDeclaration();
+        constDeclaration.setCONST(ctx.CONST().getText());
+        constDeclaration.setID(ctx.ID().getText());
+        constDeclaration.setExpression((Expression) visit(ctx.expression()));
+
+        return  constDeclaration;
+    }
+
+    @Override
+    public Ifstatement visitIfStatement(ParserFile.IfStatementContext ctx) {
+        Ifstatement ifstatement=new Ifstatement();
+        ifstatement.setIF(ctx.IF().getText());
+        ifstatement.setExpression((Expression) visit(ctx.expression()));
+        for (int i = 0; i < ctx.statement().size(); i++) {
+            ifstatement.getStatement().add(visitStatement(ctx.statement(i)));
+        }
+        return ifstatement;
+    }
+
+    @Override
+    public ReturnStatement visitReturnStatement(ParserFile.ReturnStatementContext ctx) {
+        ReturnStatement returnStatement=new ReturnStatement();
+        returnStatement.setReturn(ctx.RETURN().getText());
+        if(ctx.expression()!=null){
+            returnStatement.setExpression((Expression) visit(ctx.expression()));
+        }
+        return  returnStatement;
+    }
+
+    @Override
+    public MethodcallStatment visitMethodCallStatement(ParserFile.MethodCallStatementContext ctx) {
+        MethodcallStatment methodcallStatment=new MethodcallStatment();
+        methodcallStatment.setID(ctx.ID().getText());
+        for (int i = 0; i < ctx.expression().size(); i++) {
+            methodcallStatment.getExpression().add((Expression) visit(ctx.expression().get(i)));
+        }
+        return methodcallStatment;
+    }
+
+    @Override
+    public AssignmentStatement visitAssignmentStatement(ParserFile.AssignmentStatementContext ctx) {
+        AssignmentStatement assignmentStatement=new AssignmentStatement();
+        for (int i = 0; i < ctx.expression().size(); i++) {
+            assignmentStatement.getExpression().add((Expression) visit(ctx.expression(i)));
+        }
+        return  assignmentStatement;
+    }
+
+    @Override
+    public ExpressionStatement visitExpressionStatement(ParserFile.ExpressionStatementContext ctx) {
+        ExpressionStatement expressionStatement =new ExpressionStatement();
+        expressionStatement.setExpression((Expression) visit(ctx.expression()));
+
+        return  expressionStatement;
+    }
+
+    @Override
+    public Statement visitStatement(ParserFile.StatementContext ctx) {
+        Statement statement =new Statement();
+        if(ctx.block()!=null){
+            statement.setBlock(visitBlock(ctx.block()));
+        }if(ctx.assignmentStatement()!=null){
+            statement.setAssignmentStatement(visitAssignmentStatement(ctx.assignmentStatement()));
+        }if(ctx.methodCallStatement()!=null){
+            statement.setMethodcallStatment(visitMethodCallStatement(ctx.methodCallStatement()));
+        }if(ctx.returnStatement()!=null){
+            statement.setReturnStatement(visitReturnStatement(ctx.returnStatement()));
+        }if(ctx.ifStatement()!=null){
+            statement.setIfstatement(visitIfStatement(ctx.ifStatement()));
+        }if(ctx.constDeclaration()!=null){
+            statement.setConstDeclaration(visitConstDeclaration(ctx.constDeclaration()));
+        }if(ctx.expressionStatement()!=null){
+            statement.setExpressionStatement(visitExpressionStatement(ctx.expressionStatement()));
+        }if(ctx.variableDeclaration()!=null){
+            statement.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
+        }if(ctx.functionDeclaration()!=null){
+            statement.setFunctionDeclaration(visitFunctionDeclaration(ctx.functionDeclaration()));
+        }
+        return  statement;
+    }
+
+    @Override
+    public Block visitBlock(ParserFile.BlockContext ctx) {
+        Block block= new Block();
+        if(!ctx.statement().isEmpty()){
+            for (int i = 0; i < ctx.statement().size(); i++) {
+                block.getStatement().add(visitStatement(ctx.statement(i)));
+            }
+        }
+        return block;
     }
 
     @Override
     public Parameter visitParameter(ParserFile.ParameterContext ctx) {
         Parameter parameter=new Parameter();
+        if(ctx.PRIVATE()!=null){
+            parameter.setPRIVATE(ctx.PRIVATE().getText());
+        }
         for (int i = 0; i < ctx.ID().size(); i++) {
             parameter.getId().add(String.valueOf(ctx.ID().get(i)));
+        }
+        if(ctx.ANY()!=null){
+            parameter.setANY(ctx.ANY().getText());
         }
         return  parameter;
     }
 
     @Override
     public ParameterList visitParameterList(ParserFile.ParameterListContext ctx) {
-        ParameterList parameterList= new ParameterList();
-        for (int i = 0; i <ctx.parameter().size() ; i++) {
+        ParameterList parameterList=new ParameterList();
+        for (int i = 0; i < ctx.parameter().size(); i++) {
             parameterList.getParameterList().add(visitParameter(ctx.parameter(i)));
         }
         return parameterList;
     }
 
     @Override
-    public SelfClosingTag visitSelfClosingTag(ParserFile.SelfClosingTagContext ctx) {
-        SelfClosingTag selfClosingTag=new SelfClosingTag();
-        selfClosingTag.setHtmlTag(visitHtmlTag(ctx.htmlTag()));
-        if(!ctx.htmlAttribute().isEmpty())
-        {
-            for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
-                selfClosingTag.getHtmlAttributeList().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
-            }
-        }
-        return selfClosingTag;
-    }
-
-    @Override
-    public StyleArray visitStyleArray(ParserFile.StyleArrayContext ctx) {
-        StyleArray styleArray=new StyleArray();
-        for (int i = 0; i < ctx.cssLiteral().size(); i++) {
-            styleArray.getCssLiteral().add(visitCssLiteral(ctx.cssLiteral(i)));
-        }
-        return styleArray;
-    }
-
-    @Override
-    public StylesField visitStylesField(ParserFile.StylesFieldContext ctx) {
-        StylesField stylesField=new StylesField();
-        stylesField.setSTYLES(ctx.STYLES().getText());
-        stylesField.setStyleArray(visitStyleArray(ctx.styleArray()));
-        return stylesField;
-    }
-
-    @Override
-    public TemplateExpr visitTemplateExpr(ParserFile.TemplateExprContext ctx) {
-        TemplateExpr templateExpr=new TemplateExpr();
-        templateExpr.setTemplateLiteral(visitTemplateLiteral(ctx.templateLiteral()));
-        return  templateExpr;
-    }
-
-    @Override
-    public TemplateField visitTemplateField(ParserFile.TemplateFieldContext ctx) {
-        TemplateField templateField=new TemplateField();
-        templateField.setTEMPLATEE(ctx.TEMPLATEE().getText());
-        templateField.setTemplateLiteral(visitTemplateLiteral(ctx.templateLiteral()));
-        return  templateField;
-    }
-
-    @Override
-    public TemplateLiteral visitTemplateLiteral(ParserFile.TemplateLiteralContext ctx) {
-        TemplateLiteral templateLiteral=new TemplateLiteral();
-        if(ctx.htmlContent()!=null)
-        {
-            templateLiteral.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
-        }
-        return templateLiteral;
-    }
-
-    @Override
-    public VariableDeclaration visitVariableDeclaration(ParserFile.VariableDeclarationContext ctx) {
-        VariableDeclaration variableDeclaration=new VariableDeclaration();
-        variableDeclaration.setID(ctx.ID().getText());
-
-        variableDeclaration.setExpression((Expression) visit(ctx.expression()));
-        return  variableDeclaration;
-    }
-
-    @Override
-    public CssExpr visitCssExpr(ParserFile.CssExprContext ctx) {
-        CssExpr cssExpr=new CssExpr();
-        cssExpr.setCssLiteral(visitCssLiteral(ctx.cssLiteral()));
-        return  cssExpr;
-    }
-
-    @Override
-    public CssLiteral visitCssLiteral(ParserFile.CssLiteralContext ctx) {
-        CssLiteral cssLiteral=new CssLiteral();
-        cssLiteral.setCssContent(visitCssContent(ctx.cssContent()));
-        return  cssLiteral;
-    }
-
-
-    @Override
-    public CssRule visitCssRule(ParserFile.CssRuleContext ctx) {
-        CssRule cssRule = new CssRule();
-
-
-        for (int i = 0; i < ctx.TEMPLATE_ID().size(); i++) {
-            cssRule.getTemplateId().add(ctx.TEMPLATE_ID(i).getText());
-        }
-
-        if (!ctx.CSS_VALUE().isEmpty()) {
-            for (int i = 0; i < ctx.CSS_VALUE().size(); i++) {
-                cssRule.getCssValue().add(ctx.CSS_VALUE(i).getText());
-            }
-        }
-
-        return cssRule;
-    }
-
-
-    @Override
-    public CssStatement visitCssStatement(ParserFile.CssStatementContext ctx) {
-        CssStatement cssStatement=new CssStatement();
-        cssStatement.setCssClassName(ctx.CSS_CLASSNAME().getText());
-        if(ctx.TEMPLATE_TAG_IMG()!=null)
-        {
-            cssStatement.setTemplateTagImage(ctx.TEMPLATE_TAG_IMG().getText());
-        }
-        if(!ctx.cssRule().isEmpty())
-        {
-            for (int i = 0; i < ctx.cssRule().size(); i++) {
-                cssStatement.getCssRuleList().add(visitCssRule(ctx.cssRule(i)));
-            }
-        }
-        return cssStatement;
-    }
-
-    @Override
-    public Decorator visitDecorator(ParserFile.DecoratorContext ctx) {
-       Decorator decorator=new Decorator();
-       decorator.setID(ctx.ID().getText());
-       decorator.setObjectLiteral(visitObjectLiteral(ctx.objectLiteral()));
-       return decorator;
-    }
-
-    @Override
     public FunctionDeclaration visitFunctionDeclaration(ParserFile.FunctionDeclarationContext ctx) {
         FunctionDeclaration functionDeclaration=new FunctionDeclaration();
-        functionDeclaration.setId(ctx.ID().getText());
-        if(ctx.parameterList()!=null)
-        {
+
+        for (int i = 0; i < ctx.ID().size(); i++) {
+            functionDeclaration.getId().add(String.valueOf(ctx.ID().get(i)));
+        }
+        if(ctx.parameterList()!=null){
             functionDeclaration.setParameterList(visitParameterList(ctx.parameterList()));
         }
-        for (int i = 0; i <ctx.block().size() ; i++) {
-            functionDeclaration.getBlock().add((Block) visit(ctx.block(i)));
+        if(ctx.ANY()!=null){
+            functionDeclaration.setANY(ctx.ANY().getText());
         }
-        return  functionDeclaration;
-    }
-
-    @Override
-    public GenericField visitGenericField(ParserFile.GenericFieldContext ctx) {
-        GenericField genericField=new GenericField();
-        genericField.setID(ctx.ID().getText());
-        genericField.setExpression((Expression) visit(ctx.expression()));
-        return  genericField;
-    }
-
-    @Override
-    public CloseTag visitCloseTag(ParserFile.CloseTagContext ctx) {
-        CloseTag closeTag = new CloseTag();
-        closeTag.setHtmlTag(visitHtmlTag(ctx.htmlTag()));
-        return closeTag;
-    }
-
-    @Override
-    public CssContent visitCssContent(ParserFile.CssContentContext ctx) {
-        CssContent cssContent = new CssContent();
-        if(!ctx.cssStatement().isEmpty()){
-            for(int i=0;i< ctx.cssStatement().size();i++){
-                cssContent.getCssStatementList().add(visitCssStatement(ctx.cssStatement(i)));
-            }
-
+        if(ctx.VOID()!=null){
+            functionDeclaration.setVOID(ctx.VOID().getText());
         }
-        return cssContent;
-    }
+        functionDeclaration.setBlock(visitBlock(ctx.block()));
 
-    @Override
-    public ImportStatement visitImportStatement(ParserFile.ImportStatementContext ctx) {
-        ImportStatement importStatement = new ImportStatement();
-        importStatement.setIMPORT(ctx.IMPORT().getText());
-        importStatement.setID(ctx.ID().getText());
-        importStatement.setFROM(ctx.FROM().getText());
-        importStatement.setSTRING_LITERAL(ctx.STRING_LITERAL().getText());
-        return importStatement;
-    }
-
-    @Override
-    public Interpolation visitInterpolation(ParserFile.InterpolationContext ctx) {
-        Interpolation interpolation=new Interpolation();
-
-        if(ctx.interpolationContent()!=null)
-        {
-            interpolation.setInterpolationContent(visitInterpolationContent(ctx.interpolationContent()));
-        }
-        return interpolation;
-    }
-
-    @Override
-    public InterpolationChunk visitInterpolationChunk(ParserFile.InterpolationChunkContext ctx) {
-        InterpolationChunk interpolationChunk=new InterpolationChunk();
-        interpolationChunk.setInterpolation(visitInterpolation(ctx.interpolation()));
-        return  interpolationChunk;
+        return functionDeclaration;
     }
 
     @Override
     public ObjectFieldInArray visitObjectFieldInArray(ParserFile.ObjectFieldInArrayContext ctx) {
-        ObjectFieldInArray objectFieldInArray = new ObjectFieldInArray();
-        objectFieldInArray.setId(ctx.ID().getText());
+        ObjectFieldInArray objectFieldInArray=new ObjectFieldInArray();
         if(ctx.literal()!=null){
             objectFieldInArray.setLiteral(visitLiteral(ctx.literal()));
-
         }
-        return  objectFieldInArray;
+        objectFieldInArray.setId(ctx.ID().getText());
+
+        return objectFieldInArray;
     }
 
     @Override
-    public ObjectLiteral visitObjectLiteral(ParserFile.ObjectLiteralContext ctx) {
-        ObjectLiteral objectLiteral=new ObjectLiteral();
+    public ArrayElement visitArrayElement(ParserFile.ArrayElementContext ctx) {
+        ArrayElement arrayElement=new ArrayElement();
+        arrayElement.setExpression((Expression) visit(ctx.expression()));
 
-        for (int i = 0; i < ctx.objectField().size(); i++) {
-            objectLiteral.getObjectField().add((ObjectField) visit(ctx.objectField(i)));
-        }
-        return  objectLiteral;
+        return  arrayElement;
     }
 
     @Override
-    public Html_Id visitHtml_Id(ParserFile.Html_IdContext ctx) {
-        Html_Id html_id = new Html_Id();
-        html_id.setTEMPLATE_ID(ctx.TEMPLATE_ID().getText());
-        return html_id;
+    public ArrayLiteral visitArrayLiteral(ParserFile.ArrayLiteralContext ctx) {
+        ArrayLiteral arrayLiteral=new ArrayLiteral();
+
+        if(!ctx.arrayElement().isEmpty()){
+            for (int i = 0; i < ctx.arrayElement().size(); i++) {
+                arrayLiteral.getArrayElement().add(visitArrayElement(ctx.arrayElement(i)));
+            }
+        }
+        return arrayLiteral;
+    }
+
+    @Override
+    public ClassMember visitClassMember(ParserFile.ClassMemberContext ctx) {
+        ClassMember classMember=new ClassMember();
+
+        if(ctx.variableDeclaration()!=null){
+            classMember.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
+        }if(ctx.functionDeclaration()!=null){
+            classMember.setFunctionDeclaration(visitFunctionDeclaration(ctx.functionDeclaration()));
+        }
+        return  classMember;
+    }
+
+    @Override
+    public ClassDeclaration visitClassDeclaration(ParserFile.ClassDeclarationContext ctx) {
+        ClassDeclaration classDeclaration=new ClassDeclaration();
+
+        classDeclaration.setEXPORT(ctx.EXPORT().getText());
+        classDeclaration.setCLASS(ctx.CLASS().getText());
+
+        for (int i = 0; i < ctx.ID().size(); i++) {
+            classDeclaration.getID().add(String.valueOf(ctx.ID().get(i)));
+        }
+        if(ctx.IMPLEMENTS()!=null){
+            classDeclaration.setImplementsWord(ctx.IMPLEMENTS().getText());
+        }
+        if(!ctx.classMember().isEmpty()){
+            for (int i = 0; i < ctx.classMember().size(); i++) {
+                classDeclaration.getClassMember().add(visitClassMember(ctx.classMember(i)));
+            }
+        }
+        return classDeclaration;
+    }
+
+    @Override
+    public AttributeValue visitAttributeValue(ParserFile.AttributeValueContext ctx) {
+        AttributeValue attributeValue=new AttributeValue();
+        if(ctx.TEMPLATE_STRING()!=null){
+            attributeValue.setTEMPLATE_STRING(ctx.TEMPLATE_STRING().getText());
+        }if(ctx.TEMPLATE_ID()!=null){
+            attributeValue.setTEMPLATE_ID(ctx.TEMPLATE_ID().getText());
+        }if(ctx.interpolation()!=null){
+            attributeValue.setInterpolation(visitInterpolation(ctx.interpolation()));
+        }
+        return attributeValue;
     }
 
     @Override
@@ -383,58 +641,10 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         if(ctx.ANGULAR_STRUCTURAL_DIRECTIVE()!=null) {
             htmlAttribute.setANGULAR_STRUCTURAL_DIRECTIVE(ctx.ANGULAR_STRUCTURAL_DIRECTIVE().getText());
         }
-        htmlAttribute.setAttributeValue(visitAttributeValue(ctx.attributeValue()));
+        if(ctx.attributeValue()!=null){
+            htmlAttribute.setAttributeValue(visitAttributeValue(ctx.attributeValue()));
+        }
         return htmlAttribute;
-    }
-
-    @Override
-    public HtmlCloseTagChunk visitHtmlCloseTagChunk(ParserFile.HtmlCloseTagChunkContext ctx) {
-        HtmlCloseTagChunk htmlCloseTagChunk = new HtmlCloseTagChunk();
-        htmlCloseTagChunk.setCloseTag(visitCloseTag(ctx.closeTag()));
-        return  htmlCloseTagChunk;
-    }
-
-    @Override
-    public HtmlContent visitHtmlContent(ParserFile.HtmlContentContext ctx) {
-        HtmlContent htmlContent = new HtmlContent();
-        for (int i = 0; i < ctx.htmlChunk().size(); i++) {
-            htmlContent.getHtmlChunkList().add((HtmlChunk)visit(ctx.htmlChunk(i)));
-
-        }
-        return htmlContent;
-    }
-
-    @Override
-    public HtmlElement visitHtmlElement(ParserFile.HtmlElementContext ctx) {
-        HtmlElement htmlElement = new HtmlElement();
-        if(!ctx.htmlAttribute().isEmpty()){
-            for (int i = 0; i < ctx.htmlAttribute().size(); i++) {
-                htmlElement.getHtmlAttributeList().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
-            }
-        }
-        if(!ctx.htmlChunk().isEmpty()){
-            for (int i = 0; i < ctx.htmlChunk().size(); i++) {
-                htmlElement.getHtmlChunkList().add((HtmlChunk)visit (ctx.htmlChunk(i)));
-            }
-        }
-        htmlElement.setHtmlTag(visitHtmlTag(ctx.htmlTag()));
-        htmlElement.setCloseTag(visitCloseTag(ctx.closeTag()));
-
-        return htmlElement;
-    }
-
-    @Override
-    public HtmlElementChunk visitHtmlElementChunk(ParserFile.HtmlElementChunkContext ctx) {
-        HtmlElementChunk htmlElementChunk = new HtmlElementChunk();
-        htmlElementChunk.setHtmlElement(visitHtmlElement(ctx.htmlElement()));
-        return htmlElementChunk;
-    }
-
-    @Override
-    public HtmlSelfClosingChunk visitHtmlSelfClosingChunk(ParserFile.HtmlSelfClosingChunkContext ctx) {
-        HtmlSelfClosingChunk htmlSelfClosingChunk = new HtmlSelfClosingChunk();
-        htmlSelfClosingChunk.setSelfClosingTag(visitSelfClosingTag(ctx.selfClosingTag()));
-        return htmlSelfClosingChunk;
     }
 
     @Override
@@ -484,37 +694,53 @@ public class BaseVisitor extends ParserFileBaseVisitor {
     }
 
     @Override
-    public IdentifierExpr visitIdentifierExpr(ParserFile.IdentifierExprContext ctx) {
-        IdentifierExpr identifierExpr = new IdentifierExpr();
-        if(!ctx.literal().isEmpty()){
-            for (int i = 0; i < ctx.literal().size(); i++) {
-                identifierExpr.getLiteral().add(visitLiteral(ctx.literal(i)));
+    public CloseTag visitCloseTag(ParserFile.CloseTagContext ctx) {
+        CloseTag closeTag = new CloseTag();
+        closeTag.setHtmlTag(visitHtmlTag(ctx.htmlTag()));
+        return closeTag;
+    }
+
+    @Override
+    public SelfClosingTag visitSelfClosingTag(ParserFile.SelfClosingTagContext ctx) {
+        SelfClosingTag selfClosingTag=new SelfClosingTag();
+        selfClosingTag.setHtmlTag(visitHtmlTag(ctx.htmlTag()));
+        if(!ctx.htmlAttribute().isEmpty())
+        {
+            for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
+                selfClosingTag.getHtmlAttributeList().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
             }
         }
-        for (int i = 0; i < ctx.ID().size(); i++) {
-            identifierExpr.getId().add(String.valueOf(ctx.ID().get(i)));
+        return selfClosingTag;
+    }
+
+    @Override
+    public HtmlElement visitHtmlElement(ParserFile.HtmlElementContext ctx) {
+        HtmlElement htmlElement = new HtmlElement();
+
+        if(!ctx.htmlAttribute().isEmpty()){
+            for (int i = 0; i < ctx.htmlAttribute().size(); i++) {
+                htmlElement.getHtmlAttributeList().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
+            }
         }
-        return identifierExpr;
-    }
-
-    @Override
-    public Object visitHtmlTextChunk(ParserFile.HtmlTextChunkContext ctx) {
-        return super.visitHtmlTextChunk(ctx);
-    }
-
-    @Override
-    public Object visitHtmlNewlineChunk(ParserFile.HtmlNewlineChunkContext ctx) {
-        return super.visitHtmlNewlineChunk(ctx);
-    }
-
-
-    @Override
-    public InterpolationContent visitInterpolationContent(ParserFile.InterpolationContentContext ctx) {
-        InterpolationContent interpolationContent = new InterpolationContent();
-        for (int i = 0; i < ctx.interpolationExpr().size(); i++) {
-            interpolationContent.getInterpolationExprList().add(visitInterpolationExpr(ctx.interpolationExpr(i)));
+        if(!ctx.htmlChunk().isEmpty()){
+            for (int i = 0; i < ctx.htmlChunk().size(); i++) {
+                htmlElement.getHtmlChunkList().add((HtmlChunk)visit (ctx.htmlChunk(i)));
+            }
         }
-        return  interpolationContent;
+        htmlElement.setHtmlTag(visitHtmlTag(ctx.htmlTag()));
+        htmlElement.setCloseTag(visitCloseTag(ctx.closeTag()));
+
+        return htmlElement;
+    }
+
+    @Override
+    public InterpolationFullExpr visitInterpolationFullExpr(ParserFile.InterpolationFullExprContext ctx) {
+        InterpolationFullExpr interpolationFullExpr=new InterpolationFullExpr();
+
+        for (int i = 0; i < ctx.INTERPOLATION_ID().size(); i++) {
+            interpolationFullExpr.getInterpolationId().add(String.valueOf(ctx.INTERPOLATION_ID().get(i)));
+        }
+        return  interpolationFullExpr;
     }
 
     @Override
@@ -532,7 +758,161 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         if (ctx.INTERPOLATION_STRING() != null) {
             interpolationExpr.setInterpolationId(ctx.INTERPOLATION_STRING().getText());
         }
+        if(ctx.interpolationFullExpr()!=null){
+            interpolationExpr.setInterpolationFullExpr(visitInterpolationFullExpr(ctx.interpolationFullExpr()));
+        }
         return interpolationExpr;
+    }
+
+    @Override
+    public InterpolationContent visitInterpolationContent(ParserFile.InterpolationContentContext ctx) {
+        InterpolationContent interpolationContent = new InterpolationContent();
+        for (int i = 0; i < ctx.interpolationExpr().size(); i++) {
+            interpolationContent.getInterpolationExprList().add(visitInterpolationExpr(ctx.interpolationExpr(i)));
+        }
+        return  interpolationContent;
+    }
+
+    @Override
+    public Interpolation visitInterpolation(ParserFile.InterpolationContext ctx) {
+        Interpolation interpolation=new Interpolation();
+
+        if(ctx.interpolationContent()!=null)
+        {
+            interpolation.setInterpolationContent(visitInterpolationContent(ctx.interpolationContent()));
+        }
+        return interpolation;
+    }
+
+    @Override
+    public HtmlElementChunk visitHtmlElementChunk(ParserFile.HtmlElementChunkContext ctx) {
+        HtmlElementChunk htmlElementChunk = new HtmlElementChunk();
+        htmlElementChunk.setHtmlElement(visitHtmlElement(ctx.htmlElement()));
+        return htmlElementChunk;
+    }
+
+    @Override
+    public HtmlSelfClosingChunk visitHtmlSelfClosingChunk(ParserFile.HtmlSelfClosingChunkContext ctx) {
+        HtmlSelfClosingChunk htmlSelfClosingChunk = new HtmlSelfClosingChunk();
+        htmlSelfClosingChunk.setSelfClosingTag(visitSelfClosingTag(ctx.selfClosingTag()));
+        return htmlSelfClosingChunk;
+    }
+
+    @Override
+    public InterpolationChunk visitInterpolationChunk(ParserFile.InterpolationChunkContext ctx) {
+        InterpolationChunk interpolationChunk=new InterpolationChunk();
+        interpolationChunk.setInterpolation(visitInterpolation(ctx.interpolation()));
+        return  interpolationChunk;
+    }
+
+    @Override
+    public HtmlCloseTagChunk visitHtmlCloseTagChunk(ParserFile.HtmlCloseTagChunkContext ctx) {
+        HtmlCloseTagChunk htmlCloseTagChunk = new HtmlCloseTagChunk();
+        htmlCloseTagChunk.setCloseTag(visitCloseTag(ctx.closeTag()));
+        return  htmlCloseTagChunk;
+    }
+
+    @Override
+    public Html_Id visitHtml_Id(ParserFile.Html_IdContext ctx) {
+        Html_Id html_id = new Html_Id();
+        html_id.setTEMPLATE_ID(ctx.TEMPLATE_ID().getText());
+        return html_id;
+    }
+
+    @Override
+    public Object visitHtmlTextChunk(ParserFile.HtmlTextChunkContext ctx) {
+        return super.visitHtmlTextChunk(ctx);
+    }
+
+    @Override
+    public Object visitHtmlNewlineChunk(ParserFile.HtmlNewlineChunkContext ctx) {
+        return super.visitHtmlNewlineChunk(ctx);
+    }
+
+    @Override
+    public HtmlContent visitHtmlContent(ParserFile.HtmlContentContext ctx) {
+        HtmlContent htmlContent = new HtmlContent();
+        for (int i = 0; i < ctx.htmlChunk().size(); i++) {
+            htmlContent.getHtmlChunkList().add((HtmlChunk)visit(ctx.htmlChunk(i)));
+
+        }
+        return htmlContent;
+    }
+
+    @Override
+    public CssRule visitCssRule(ParserFile.CssRuleContext ctx) {
+        CssRule cssRule = new CssRule();
+
+        for (int i = 0; i < ctx.TEMPLATE_ID().size(); i++) {
+            cssRule.getTemplateId().add(ctx.TEMPLATE_ID(i).getText());
+        }
+
+        if (!ctx.CSS_VALUE().isEmpty()) {
+            for (int i = 0; i < ctx.CSS_VALUE().size(); i++) {
+                cssRule.getCssValue().add(ctx.CSS_VALUE(i).getText());
+            }
+        }
+
+        return cssRule;
+    }
+
+    @Override
+    public CssStatement visitCssStatement(ParserFile.CssStatementContext ctx) {
+        CssStatement cssStatement=new CssStatement();
+
+        if(ctx.CSS_CLASSNAME()!=null){
+            cssStatement.setCssClassName(ctx.CSS_CLASSNAME().getText());
+        }
+        if(ctx.TEMPLATE_TAG_IMG()!=null)
+        {
+            cssStatement.setTemplateTagImage(ctx.TEMPLATE_TAG_IMG().getText());
+        }
+        if(!ctx.cssRule().isEmpty())
+        {
+            for (int i = 0; i < ctx.cssRule().size(); i++) {
+                cssStatement.getCssRuleList().add(visitCssRule(ctx.cssRule(i)));
+            }
+        }
+        if(!ctx.TEMPLATE_ID().isEmpty()){
+            for (int i = 0; i < ctx.TEMPLATE_ID().size(); i++) {
+                cssStatement.getTemplateId().add(String.valueOf(ctx.TEMPLATE_ID().get(i)));
+            }
+        }
+        if(ctx.TEMPLATE_TAG_BUTTON()!=null)
+        {
+            cssStatement.setTemplateTagButton(ctx.TEMPLATE_TAG_BUTTON().getText());
+        }
+
+        return cssStatement;
+    }
+
+    @Override
+    public CssContent visitCssContent(ParserFile.CssContentContext ctx) {
+        CssContent cssContent = new CssContent();
+        if(!ctx.cssStatement().isEmpty()){
+            for(int i=0;i< ctx.cssStatement().size();i++){
+                cssContent.getCssStatementList().add(visitCssStatement(ctx.cssStatement(i)));
+            }
+
+        }
+        return cssContent;
+    }
+
+    @Override
+    public CssLiteral visitCssLiteral(ParserFile.CssLiteralContext ctx) {
+        CssLiteral cssLiteral=new CssLiteral();
+        cssLiteral.setCssContent(visitCssContent(ctx.cssContent()));
+        return  cssLiteral;
+    }
+
+    @Override
+    public TemplateLiteral visitTemplateLiteral(ParserFile.TemplateLiteralContext ctx) {
+        TemplateLiteral templateLiteral=new TemplateLiteral();
+        if(ctx.htmlContent()!=null)
+        {
+            templateLiteral.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
+        }
+        return templateLiteral;
     }
 
     @Override
@@ -550,13 +930,13 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         if (ctx.FALSE() != null) {
             literal.setFalseId(ctx.FALSE().getText());
         }
+        if(ctx.templateLiteral()!=null){
+            literal.setTemplateLiteral(visitTemplateLiteral(ctx.templateLiteral()));
+        }
+        if(ctx.TEMPLATE_ID()!=null){
+            literal.setTemplate_id(ctx.TEMPLATE_ID().getText());
+        }
         return literal;
     }
 
-    @Override
-    public LiteralExpr  visitLiteralExpr (ParserFile.LiteralExprContext ctx) {
-        LiteralExpr  literalExpr  = new LiteralExpr();
-        literalExpr.setLiteral(visitLiteral(ctx.literal()));
-        return  literalExpr ;
-    }
 }

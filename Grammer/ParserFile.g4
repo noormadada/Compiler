@@ -8,11 +8,7 @@ options {
 
 angularFile
     : importStatement*
-      decorator*
-      (classDeclaration
-      | constExportStatement
-      | expressionStatement)* // ← أضف هذا السطر
-      EOF
+      decorator* (classDeclaration| constExportStatement  | expressionStatement)*  EOF
     ;
 
 
@@ -53,7 +49,7 @@ expression
     | THIS DOT ID                                            # ThisPropertyExpr
     | THIS DOT ID LPAREN (expression (COMMA expression)*)? RPAREN # ThisCallExpr
     | ID ((DOT ID(AS)?) | (LSQUARE expression RSQUARE))*          # IdentifierExpr
-    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID                      # IdentifierExpr2
+    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID             # IdentifierExpr2
     | ID GT MINUS NUMBER                                     # IdentifierExpr3
     | literal                                                # LiteralExpr
     | templateLiteral                                        # TemplateExpr
@@ -103,7 +99,7 @@ cssRule
 htmlContent
     : htmlChunk+
     ;
-
+///////////////////////////////////////////////////////
 htmlChunk
     : htmlElement      # HtmlElementChunk
     | selfClosingTag   # HtmlSelfClosingChunk
