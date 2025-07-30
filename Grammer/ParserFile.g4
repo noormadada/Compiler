@@ -8,12 +8,10 @@ options {
 
 angularFile
     : importStatement*
-      decorator*
-      (classDeclaration
-      | constExportStatement
-      | expressionStatement)*
-      EOF
+      decorator* (classDeclaration| constExportStatement  | expressionStatement)*  EOF
     ;
+
+
 
 importStatement
     : IMPORT LBRACE idList RBRACE FROM STRING_LITERAL SEMI
@@ -51,7 +49,7 @@ expression
     | THIS DOT ID                                            # ThisPropertyExpr
     | THIS DOT ID LPAREN (expression (COMMA expression)*)? RPAREN # ThisCallExpr
     | ID ((DOT ID(AS)?) | (LSQUARE expression RSQUARE))*          # IdentifierExpr
-    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID                      # IdentifierExpr2
+    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID             # IdentifierExpr2
     | ID GT MINUS NUMBER                                     # IdentifierExpr3
     | literal                                                # LiteralExpr
     | templateLiteral                                        # TemplateExpr
@@ -60,7 +58,7 @@ expression
     | objectLiteral                                          # ObjectExpr
     | LBRACE (objectField (COMMA objectField)* (COMMA spreadField)? | spreadField (COMMA spreadField)*)? RBRACE # SpreadObjectExpr
     | expression DOT ID                                      # PropertyAccess
-    | expression LSQUARE expression RSQUARE                  # ArrayAccessExpr      // ← أضف هذا السطر
+    | expression LSQUARE expression RSQUARE                  # ArrayAccessExpr
     | expression LPAREN (expression (COMMA expression)*)? RPAREN # CallExpr
     | PLUS expression                                        # UnaryExpr
     | expression PLUS expression                             # BinaryExpr
@@ -101,7 +99,7 @@ cssRule
 htmlContent
     : htmlChunk+
     ;
-
+///////////////////////////////////////////////////////
 htmlChunk
     : htmlElement      # HtmlElementChunk
     | selfClosingTag   # HtmlSelfClosingChunk
@@ -133,7 +131,6 @@ interpolationExpr
     | INTERPOLATION_NTERROGATIVE
     | INTERPOLATION_COLON
     ;
-
 
 interpolationFullExpr
     : INTERPOLATION_ID (INTERPOLATION_DOT INTERPOLATION_ID)*
@@ -197,10 +194,11 @@ variableDeclaration
     | (PRIVATE)? ID ASSIGN expression SEMI
     ;
 
+
 type
     : (ID | ANY | VOID) (LSQUARE RSQUARE)*
     ;
-//////////////
+
 arrayLiteral
     : LSQUARE (arrayElement (COMMA arrayElement)*)? RSQUARE
     ;
@@ -267,4 +265,3 @@ constDeclaration
 constExportStatement
     : EXPORT CONST ID COLON type ASSIGN expression SEMI
     ;
-

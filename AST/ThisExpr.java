@@ -1,6 +1,6 @@
 package AST;
 
-public class ThisExpr {
+public class ThisExpr extends Expression implements AST_Node {
     String This;
 
     public String getThis() {

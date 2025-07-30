@@ -2,6 +2,7 @@ package Visitor.checks;
 
 import AST.Expression;
 import AST.IdentifierExpr;
+import AST.Literal;
 import AST.VariableDeclaration;
 import SymbolTable.Symbol;
 import SymbolTable.SymbolTable;

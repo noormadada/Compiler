@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IdentifierExpr extends Expression implements AST_Node{
-   List<String> id = new ArrayList<>();
-   String as;
-   List<Expression> expressionList= new ArrayList<>();
+    List<String> id = new ArrayList<>();
+    List<String> as = new ArrayList<>();
+    List<Expression> expressionList= new ArrayList<>();
 
     public List<String> getId() {
         return id;
@@ -16,11 +16,11 @@ public class IdentifierExpr extends Expression implements AST_Node{
         this.id = id;
     }
 
-    public String getAs() {
+    public List<String> getAs() {
         return as;
     }
 
-    public void setAs(String as) {
+    public void setAs(List<String> as) {
         this.as = as;
     }
 
@@ -36,11 +36,11 @@ public class IdentifierExpr extends Expression implements AST_Node{
     @Override
     public String toString() {
         if(as!=null)
-        return "IdentifierExpr{" +
-                "\n id=" + id +
-                "\n as='" + as +
-                "\n expressionList=" + " " +
-                '}';
+            return "IdentifierExpr{" +
+                    "\n id=" + id +
+                    "\n as='" + as +
+                    "\n expressionList=" + " " +
+                    '}';
         else if (!expressionList.isEmpty())
             return "IdentifierExpr{" +
                     "\n id=" + id +

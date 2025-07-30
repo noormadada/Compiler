@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThisCallExpr  {
+public class ThisCallExpr extends Expression implements AST_Node {
 
     String This;
     String id;
@@ -37,11 +37,11 @@ public class ThisCallExpr  {
     @Override
     public String toString() {
         if(expressionList.isEmpty())
-        return "ThisCallExpr{" +
-                "\n This='" + This +
-                "\n id='" + id +
-                "\n expressionList=" + " " +
-                '}';
+            return "ThisCallExpr{" +
+                    "\n This='" + This +
+                    "\n id='" + id +
+                    "\n expressionList=" + " " +
+                    '}';
         else
             return "ThisCallExpr{" +
                     "\n This='" + This + " " +

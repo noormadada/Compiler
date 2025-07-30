@@ -1,5 +1,4 @@
 package Visitor.checks;
-
 import AST.Decorator;
 import AST.TemplateField;
 import SymbolTable.Symbol;

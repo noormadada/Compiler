@@ -52,21 +52,24 @@ public class SemanticAnalyzerVisitor {
                 }
             }
 
-            // التحقق من وجود template في @Component
-            if (angularFile.getDecorator() != null) {
-                new TemplateFieldChecker(writer, symbolTable).check(angularFile.getDecorator());
 
-                // التحقق من أخطاء CSS ضمن styles
-                ObjectLiteral objectLiteral = angularFile.getDecorator().getObjectLiteral();
-                for (ObjectField field : objectLiteral.getObjectField()) {
-                    if (field instanceof StylesField stylesField) {
-                        StyleArray styleArray = stylesField.getStyleArray();
-                        for (CssLiteral cssLiteral : styleArray.getCssLiteral()) {
-                            new InvalidCssPropertyNameChecker(writer, symbolTable).check(cssLiteral);
+            if (angularFile.getDecorator() != null) {
+                for (Decorator decorator : angularFile.getDecorator()) {
+                    new TemplateFieldChecker(writer, symbolTable).check(decorator);
+
+                    // التحقق من أخطاء CSS ضمن styles
+                    ObjectLiteral objectLiteral = decorator.getObjectLiteral();
+                    for (ObjectField field : objectLiteral.getObjectField()) {
+                        if (field instanceof StylesField stylesField) {
+                            StyleArray styleArray = stylesField.getStyleArray();
+                            for (CssLiteral cssLiteral : styleArray.getCssLiteral()) {
+                                new InvalidCssPropertyNameChecker(writer, symbolTable).check(cssLiteral);
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 

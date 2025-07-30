@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Block implements AST_Node {
+public  class Block implements AST_Node {
     List<Statement> statement=new ArrayList<>();
 
     public List<Statement> getStatement() {
@@ -18,7 +18,7 @@ public class Block implements AST_Node {
         if(statement.isEmpty()) {
             return "";
         }
-     else {
+        else {
             return "Block{" +
                     "statement=" + statement +
                     '}';

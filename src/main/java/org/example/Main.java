@@ -15,7 +15,7 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String source = "tests/my-app.txt";
+        String source = "Errors/errors.txt";
         CharStream cs = fromFileName(source);
 
         gen.LexerFile lexerFiler = new gen.LexerFile(cs);
@@ -24,6 +24,8 @@ public class Main {
 
         ParseTree tree = myLanguageParser.angularFile();
         AngularFile doc = (AngularFile) new BaseVisitor().visit(tree);
+
+       // System.out.print(doc);
 
         SemanticAnalyzerVisitor semanticAnalyzer = new SemanticAnalyzerVisitor();
         semanticAnalyzer.analyze(doc);

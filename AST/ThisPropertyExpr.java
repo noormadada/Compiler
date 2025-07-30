@@ -1,6 +1,6 @@
 package AST;
 
-public class ThisPropertyExpr {
+public class ThisPropertyExpr extends Expression implements AST_Node {
 
     String This;
     String id;

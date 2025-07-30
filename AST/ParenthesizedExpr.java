@@ -1,6 +1,6 @@
 package AST;
 
-public class ParenthesizedExpr {
+public class ParenthesizedExpr extends Expression implements AST_Node {
 
     Expression expression;
 
