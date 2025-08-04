@@ -6,9 +6,9 @@ options {
     tokenVocab = LexerFile;
 }
 
+
 angularFile
-    : importStatement*
-      decorator* (classDeclaration| constExportStatement  | expressionStatement)*  EOF
+    : (importStatement* decorator* (classDeclaration | constExportStatement | expressionStatement)+)+ EOF
     ;
 
 

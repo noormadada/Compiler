@@ -71,17 +71,11 @@ public class AngularFile implements AST_Node {
                            ", constExportStatement=" + constExportStatement +
                            '}';
 
-               } else if(!expressionStatement.isEmpty())  {
+               } else {
                    return "AngularFile{" +
                            "importstatement=" + importstatement +
                            ", decorator=" + decorator +
                            ", expressionStatement=" + expressionStatement +
-                           '}';
-
-               }else {
-                   return "AngularFile{" +
-                           "importstatement=" + importstatement +
-                           ", decorator=" + decorator +
                            '}';
 
                }
@@ -98,15 +92,10 @@ public class AngularFile implements AST_Node {
                             ", constExportStatement=" + constExportStatement +
                             '}';
 
-                } else if (!expressionStatement.isEmpty()) {
+                } else  {
                     return "AngularFile{" +
                             "importstatement=" + importstatement +
                             ", expressionStatement=" + expressionStatement +
-                            '}';
-
-                } else {
-                    return "AngularFile{" +
-                            "importstatement=" + importstatement +
                             '}';
 
                 }
@@ -126,15 +115,10 @@ public class AngularFile implements AST_Node {
                                 ", constExportStatement=" + constExportStatement +
                                 '}';
 
-                    } else if(!expressionStatement.isEmpty())  {
+                    } else  {
                         return "AngularFile{" +
                                 ", decorator=" + decorator +
                                 ", expressionStatement=" + expressionStatement +
-                                '}';
-
-                    }else {
-                        return "AngularFile{" +
-                                ", decorator=" + decorator +
                                 '}';
 
                     }
@@ -149,17 +133,12 @@ public class AngularFile implements AST_Node {
                                 ", constExportStatement=" + constExportStatement +
                                 '}';
 
-                    } else if(!expressionStatement.isEmpty())  {
+                    } else  {
                         return "AngularFile{" +
                                 ", expressionStatement=" + expressionStatement +
                                 '}';
 
-                    }else {
-                        return "AngularFile{" +
-                                '}';
-
                     }
-
                 }
             }
         }

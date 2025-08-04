@@ -17,12 +17,12 @@ public class SemanticAnalyzerVisitor {
 
             if (angularFile.getClassDeclaration() == null) return;
 
-            // التحقق من أسماء الكلاسات المكررة
+
             new ClassNameChecker(writer, symbolTable).check(angularFile);
 
             for (ClassDeclaration classDecl : angularFile.getClassDeclaration()) {
 
-                // التحقق من المتغيرات المكررة داخل الكلاس
+
                 new DuplicateVariableChecker(writer, symbolTable).check(classDecl);
 
                 // تعريف المتغيرات في جدول الرموز

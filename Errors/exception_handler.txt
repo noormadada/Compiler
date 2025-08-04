@@ -1,6 +1,3 @@
-Semantic Error: Duplicate class name '[AppComponent]' found.
-Semantic Error: Duplicate variable 'selectedProduct' in class '[AppComponent]'
-Semantic Error: Index 3 out of bounds for array 'products' with length 3
-Semantic Error: Variable 'pp' used but not defined.
+Semantic Error: Duplicate variable 'product' in class '[ProductFormComponent]'
+Semantic Error: Duplicate variable 'products' in class '[ProductService]'
 Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Invalid CSS property name 'dd'
