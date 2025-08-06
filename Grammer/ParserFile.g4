@@ -45,7 +45,7 @@ spreadField
     ;
 
 expression
-    : SEMI? THIS                                             # ThisExpr
+    : SEMI? SPREAD? THIS                                             # ThisExpr
     | THIS DOT ID                                            # ThisPropertyExpr
     | THIS DOT ID LPAREN (expression (COMMA expression)*)? RPAREN # ThisCallExpr
     | ID ((DOT ID(AS)?) | (LSQUARE expression RSQUARE))*          # IdentifierExpr
@@ -59,7 +59,7 @@ expression
     | LBRACE (objectField (COMMA objectField)* (COMMA spreadField)? | spreadField (COMMA spreadField)*)? RBRACE # SpreadObjectExpr
     | expression DOT ID                                      # PropertyAccess
     | expression LSQUARE expression RSQUARE                  # ArrayAccessExpr
-    | expression LPAREN (expression (COMMA expression)*)? RPAREN # CallExpr
+    | expression LPAREN (expression (COMMA expression)*)? (ID ASSIGN GT ID DOT ID)? RPAREN # CallExpr
     | PLUS expression                                        # UnaryExpr
     | expression PLUS expression                             # BinaryExpr
     | LPAREN expression RPAREN                               # ParenthesizedExpr
@@ -99,7 +99,7 @@ cssRule
 htmlContent
     : htmlChunk+
     ;
-///////////////////////////////////////////////////////
+
 htmlChunk
     : htmlElement      # HtmlElementChunk
     | selfClosingTag   # HtmlSelfClosingChunk
@@ -244,7 +244,7 @@ expressionStatement
     ;
 
 assignmentStatement
-    : expression ASSIGN expression SEMI
+    : expression ASSIGN expression  (QMark ID DOT ID LPAREN ID RPAREN COLON)? SEMI?
     ;
 
 methodCallStatement

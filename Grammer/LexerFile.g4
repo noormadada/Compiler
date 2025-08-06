@@ -31,6 +31,7 @@ GT: '>';
 SLASH: '/';
 PLUS: '+';
 INTERJECTION:'!';
+QMark :'?';
 MINUS :'-';
 PRIVATE: 'private';
 SPREAD: '...';

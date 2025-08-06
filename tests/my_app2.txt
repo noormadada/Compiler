@@ -141,11 +141,23 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-   products = [
-    { id: 1, name: 'منتج 1', image: 'product1.png', details: 'تفاصيل المنتج 1' },
-    { id: 2, name: 'منتج 2', image: 'product2.png', details: 'تفاصيل المنتج 2' }
-  ];
-   nextId = 3;
+  private storageKey = 'products';
+  products: any[] = [];
+  nextId = 1;
+
+  constructor() {
+    const stored = localStorage.getItem(this.storageKey);
+    this.products = stored ? JSON.parse(stored) : [
+      { id: 1, name: 'منتج 1', image: 'product1.png', details: 'تفاصيل المنتج 1' },
+      { id: 2, name: 'منتج 2', image: 'product2.png', details: 'تفاصيل المنتج 2' }
+    ];
+    this.nextId = Math.max(0, ...this.products.map(p => p.id)) + 1;
+    this.save();
+  }
+
+   save() {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.products));
+  }
 
   getAll() {
     return this.products;
@@ -158,17 +170,23 @@ export class ProductService {
   add(product: any) {
     product.id = this.nextId++;
     this.products.push(product);
+    this.save();
   }
 
   update(id: number, updated: any) {
     const index = this.products.findIndex(p => p.id === id);
-    if (index > -1) this.products[index] = { ...updated, id };
+    if (index > -1) {
+      this.products[index] = { ...updated, id };
+      this.save();
+    }
   }
 
   delete(id: number) {
     this.products = this.products.filter(p => p.id !== id);
+    this.save();
   }
 }
+
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 

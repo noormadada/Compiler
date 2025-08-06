@@ -62,7 +62,7 @@ export class AppComponent {
   ];
 
   selectedProduct = this.products[3];
-  selectedProduct = pp;
+
 
 
   selectProduct(product: any) {

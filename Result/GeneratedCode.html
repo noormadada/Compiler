@@ -11,3 +11,10 @@
 
 
 <script>
+const storageKey = 'products';
+let products =  JSON.parse(localStorage.getItem(storageKey)) || [
+let nextId =Math.max(0, ...products.map(p => p.id) + 1
+
+</script>
+</body>
+</html>

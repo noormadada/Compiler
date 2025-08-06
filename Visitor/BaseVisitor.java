@@ -323,10 +323,15 @@ public class BaseVisitor extends ParserFileBaseVisitor {
 
         CallExpr callExpr = new CallExpr();
 
-        if(ctx.expression().isEmpty()){
+        if(!ctx.expression().isEmpty()){
             for (int i = 0; i < ctx.expression().size(); i++) {
 
                 callExpr.getExpressionList().add((Expression)visit(ctx.expression(i)));
+            }
+        }
+        if(!ctx.ID().isEmpty()){
+            for (int i = 0; i <ctx.ID().size() ; i++) {
+                callExpr.getId().add(String.valueOf(ctx.ID().get(i)));
             }
         }
         return callExpr;
@@ -453,6 +458,11 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         AssignmentStatement assignmentStatement=new AssignmentStatement();
         for (int i = 0; i < ctx.expression().size(); i++) {
             assignmentStatement.getExpression().add((Expression) visit(ctx.expression(i)));
+        }
+        if(!ctx.ID().isEmpty()){
+            for (int i = 0; i <ctx.ID().size() ; i++) {
+                assignmentStatement.getId().add(String.valueOf(ctx.ID().get(i)));
+            }
         }
         return  assignmentStatement;
     }

@@ -5,6 +5,16 @@ import java.util.List;
 
 public class AssignmentStatement implements AST_Node{
     List<Expression> expression=new ArrayList<>();
+    List<String> id=new ArrayList<>();
+
+    public List<String> getId() {
+        return id;
+    }
+
+    public void setId(List<String> id) {
+        this.id = id;
+    }
+
 
     public List<Expression> getExpression() {
         return expression;
@@ -13,11 +23,18 @@ public class AssignmentStatement implements AST_Node{
     public void setExpression(List<Expression> expression) {
         this.expression = expression;
     }
+
     @Override
     public String toString() {
-
-        return "AssignmentStatement{" +
-                ", Expression=" + expression +
-                '}';
+        if(!id.isEmpty()){
+            return "AssignmentStatement{" +
+                    "expression=" + expression +
+                    ", id=" + id +
+                    '}';
+        }else {
+            return "AssignmentStatement{" +
+                    "expression=" + expression +
+                    '}';
+        }
     }
 }
