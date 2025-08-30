@@ -1,0 +1,231 @@
+import { Injectable } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+  private storageKey = 'products';
+  products: any[] = [];
+  nextId = 1;
+
+  constructor() {
+     let stored = localStorage.getItem(this.storageKey);
+    this.products = stored ? JSON.parse(stored) : [
+      { id: 1, name: 'Product 1', image: '../images/1.jpg', details: 'School book ' },
+      { id: 2, name: 'Product2', image: '../images/شنتة.jpg', details: 'bag for Laptop ' },
+      { id: 3, name: 'Product 3', image: '../images/مقلمة.jpg', details: 'School tools ' }
+    ];
+    this.nextId = Math.max(0, ...this.products.map(products => products.id)) + 1;
+    this.save   Products();
+  }
+
+    saveProducts() {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.products));
+  }
+
+  getAll() {
+    return this.products;
+  }
+
+  getById(id: number) {
+    return this.products.find(products => products.id === id);
+  }
+
+  add(product: any) {
+    product.id = this.nextId++;
+    this.products.push(product);
+    this.saveProducts();
+  }
+
+  update(id: number, updated: any) {
+    const index = this.products.findIndex(products => products.id === id);
+    if (index > -1) {
+      this.products[index] = { ...updated, id };
+      this.saveProducts();
+    }
+  }
+
+  deleteProduct(id: number) {
+    this.products = this.products.filter(products => products.id !== id);
+    this.saveProducts();
+  }
+}
+
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ProductService } from '../services/product.service';
+
+@Component({
+  standalone: true,
+  selector: 'app-product-list',
+  imports: [CommonModule, RouterModule],
+  template: `
+    <div class="container">
+      <button (click)="goToAdd()">addProduct</button>
+      <div *ngFor="let product of products" class="product">
+        <h3>{{ product.name }}</h3>
+        <img [src]="product.image" />
+        <p>{{ product.details }}</p>
+        <button (click)="viewDetails(product.id)">show</button>
+        <button (click)="editProduct(product.id)">edit</button>
+        <button (click)="deleteProduct1(product.id)">delete</button>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .container { padding: 20px; }
+    .product { border: 1px solid #000; padding: 10px; margin: 10px 0; direction: rtl; }
+    img { width: 100px; }
+    button { margin: 5px; }
+  `]
+})
+export class ProductListComponent implements OnInit {
+  products: any[] = [];
+
+  constructor(
+    private productService: ProductService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.products = this.productService.getAll();
+  }
+
+  viewDetails(id: number) {
+    const url =`details/` + id;
+    window.open(url, '_blank');
+  }
+
+  editProduct(id: number) {
+    this.router.navigate(['/edit', id]);
+  }
+
+  deleteProduct1(id: number) {
+    this.productService.deleteProduct(id);
+    this.products = this.productService.getAll();
+  }
+
+  goToAdd() {
+    this.router.navigate(['/add']);
+  }
+}
+
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ProductService } from '../services/product.service';
+
+@Component({
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="details" *ngIf="product">
+      <h2>{{ product.name }}</h2>
+      <img [src]="product.image" />
+      <p>{{ product.details }}</p>
+    </div>
+  `,
+  styles: [`
+    .details { border: 1px solid black; padding: 20px; direction: rtl; }
+    img { width: 300px; display: block; margin-top: 10px; }
+  `]
+})
+export class ProductDetailsComponent {
+  product: any;
+
+  constructor(private route: ActivatedRoute, private productService: ProductService) {
+   let id = Number(this.route.snapshot.paramMap.get('id'));
+    this.product = this.productService.getById(id);
+  }
+}
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ProductService } from '../services/product.service';
+
+
+@Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <div class="form-container">
+    <h2>{{ isEdit ? ' edit ' : 'add' }} Information</h2>
+    <form>
+      <label>Name:
+        <input [(ngModel)]="product.name" name="name" required />
+      </label><br />
+      <label>Link:
+        <input [(ngModel)]="product.image" name="image" required />
+      </label><br />
+      <label>Information:
+        <textarea [(ngModel)]="product.details" name="details" required></textarea>
+      </label><br />
+      <button type="button" (click)="save()">saved</button>
+    </form>
+  </div>
+  `,
+  styles: [`
+    .form-container { padding: 20px; direction: rtl; }
+    label { display: block; margin: 10px 0; }
+    input, textarea { width: 100%; }
+  `]
+})
+export class ProductFormComponent {
+  product = { name: '', image: '', details: '' };
+  isEdit = false;
+  id: number = 0;
+
+  constructor(private route: ActivatedRoute, private router: Router, private productService: ProductService) {
+    let paramId = this.route.snapshot.paramMap.get('id');
+    if (paramId) {
+      this.isEdit = true;
+      this.id = +paramId;
+      const existing = this.productService.getById(this.id);
+      if (existing) this.product = { ...existing };
+    }
+  }
+
+  save() {
+    if (this.isEdit) {
+      this.productService.update(this.id, this.product);
+    } else {
+      this.productService.add(this.product);
+    }
+    this.router.navigate(['/']);
+  }
+}
+
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
+  template: `<router-outlet></router-outlet>`
+})
+export class AppComponent {}
+import { Routes } from '@angular/router';
+import { ProductListComponent } from './products/product-list.component';
+import { ProductDetailsComponent } from './products/product-details.component';
+import { ProductFormComponent } from './products/product-form.component';
+
+
+export const routes: Routes = [
+  { path: '', component: ProductListComponent },
+  { path: 'details/:id', component: ProductDetailsComponent },
+  { path: 'add', component: ProductFormComponent },
+  { path: 'edit/:id', component: ProductFormComponent }
+];
+
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
+
+bootstrapApplication(AppComponent, {
+  providers: [provideRouter(routes)]
+});
+
+

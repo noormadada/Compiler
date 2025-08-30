@@ -65,7 +65,7 @@ export class AppComponent {
     { name: 'منتج 3', image: 'https://via.placeholder.com/150', details: 'تفاصيل المنتج 3' }
   ];
 
-  selectedProduct = this.ppp;
+  selectedProduct =ppp;
 
   selectProduct(product: any) {
     this.selectedProduct = product;

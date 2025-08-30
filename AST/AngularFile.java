@@ -5,16 +5,34 @@ import java.util.List;
 
 public class AngularFile implements AST_Node {
     List<ImportStatement> importstatement = new ArrayList<>();
-    Decorator decorator;
+    List<Decorator> decorator =  new ArrayList<>();
     List<ClassDeclaration> classDeclaration=new ArrayList<>();
+    List<ConstExportStatement> constExportStatement= new ArrayList<>();
+    List<ExpressionStatement> expressionStatement= new ArrayList<>();
 
 
-    public Decorator getDecorator() {
+    public List<Decorator> getDecorator() {
         return decorator;
     }
 
-    public void setDecorator(Decorator decorator) {
+    public void setDecorator(List<Decorator> decorator) {
         this.decorator = decorator;
+    }
+
+    public List<ConstExportStatement> getConstExportStatement() {
+        return constExportStatement;
+    }
+
+    public void setConstExportStatement(List<ConstExportStatement> constExportStatement) {
+        this.constExportStatement = constExportStatement;
+    }
+
+    public List<ExpressionStatement> getExpressionStatement() {
+        return expressionStatement;
+    }
+
+    public void setExpressionStatement(List<ExpressionStatement> expressionStatement) {
+        this.expressionStatement = expressionStatement;
     }
 
     public List<ImportStatement> getImportstatement() {
@@ -33,19 +51,96 @@ public class AngularFile implements AST_Node {
         this.classDeclaration = classDeclaration;
     }
 
+
     @Override
     public String toString() {
-        if(importstatement.isEmpty())
-            return "AngularFile{" +
-                    "\n importstatement= " + " " +
-                    "\n decorator=" + decorator +
-                    "\n classDeclaration=" + classDeclaration +
-                    "\n }";
-        else
-        return "AngularFile{" +
-                "\n importstatement= " + importstatement +
-                "\n decorator=" + decorator +
-                "\n classDeclaration=" + classDeclaration +
-                "\n }";
+
+        if(!importstatement.isEmpty()){
+            if(!decorator.isEmpty()){
+               if(!classDeclaration.isEmpty()) {
+                   return "AngularFile{" +
+                           "importstatement=" + importstatement +
+                           ", decorator=" + decorator +
+                           ", classDeclaration=" + classDeclaration +
+                           '}';
+
+               } else if (!constExportStatement.isEmpty()) {
+                   return "AngularFile{" +
+                           "importstatement=" + importstatement +
+                           ", decorator=" + decorator +
+                           ", constExportStatement=" + constExportStatement +
+                           '}';
+
+               } else {
+                   return "AngularFile{" +
+                           "importstatement=" + importstatement +
+                           ", decorator=" + decorator +
+                           ", expressionStatement=" + expressionStatement +
+                           '}';
+
+               }
+            }else {
+                if (!classDeclaration.isEmpty()) {
+                    return "AngularFile{" +
+                            "importstatement=" + importstatement +
+                            ", classDeclaration=" + classDeclaration +
+                            '}';
+
+                } else if (!constExportStatement.isEmpty()) {
+                    return "AngularFile{" +
+                            "importstatement=" + importstatement +
+                            ", constExportStatement=" + constExportStatement +
+                            '}';
+
+                } else  {
+                    return "AngularFile{" +
+                            "importstatement=" + importstatement +
+                            ", expressionStatement=" + expressionStatement +
+                            '}';
+
+                }
+            }
+
+            }else{
+                if(!decorator.isEmpty()){
+                    if(!classDeclaration.isEmpty()) {
+                        return "AngularFile{" +
+                                ", decorator=" + decorator +
+                                ", classDeclaration=" + classDeclaration +
+                                '}';
+
+                    } else if (!constExportStatement.isEmpty()) {
+                        return "AngularFile{" +
+                                ", decorator=" + decorator +
+                                ", constExportStatement=" + constExportStatement +
+                                '}';
+
+                    } else  {
+                        return "AngularFile{" +
+                                ", decorator=" + decorator +
+                                ", expressionStatement=" + expressionStatement +
+                                '}';
+
+                    }
+                }else{
+                    if(!classDeclaration.isEmpty()) {
+                        return "AngularFile{" +
+                                ", classDeclaration=" + classDeclaration +
+                                '}';
+
+                    } else if (!constExportStatement.isEmpty()) {
+                        return "AngularFile{" +
+                                ", constExportStatement=" + constExportStatement +
+                                '}';
+
+                    } else  {
+                        return "AngularFile{" +
+                                ", expressionStatement=" + expressionStatement +
+                                '}';
+
+                    }
+                }
+            }
+        }
     }
-}
+

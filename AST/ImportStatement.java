@@ -5,7 +5,7 @@ public class ImportStatement implements AST_Node{
     String ID;
     String FROM;
     String STRING_LITERAL;
-
+    IdList idList ;
 
     public String getIMPORT() {
         return IMPORT;
@@ -38,16 +38,23 @@ public class ImportStatement implements AST_Node{
     public void setSTRING_LITERAL(String STRING_LITERAL) {
         this.STRING_LITERAL = STRING_LITERAL;
     }
-    @Override
-    public String toString() {
 
-            return "ImportStatement{" +
-                    "\n IMPORT= " + IMPORT +
-                    "\n ID=" + ID +
-                    "\n FROM=" + FROM +
-                    "\n STRING_LITERAL=" + STRING_LITERAL +
-                    "\n }";
-
+    public IdList getIdList() {
+        return idList;
     }
 
+    public void setIdList(IdList idList) {
+        this.idList = idList;
+    }
+
+    @Override
+    public String toString() {
+        return "ImportStatement{" +
+                "IMPORT='" + IMPORT + '\'' +
+                ", ID='" + ID + '\'' +
+                ", FROM='" + FROM + '\'' +
+                ", STRING_LITERAL='" + STRING_LITERAL + '\'' +
+                ", idList=" + idList +
+                '}';
+    }
 }

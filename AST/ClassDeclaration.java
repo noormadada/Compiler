@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClassDeclaration implements AST_Node {
-  String EXPORT;
+    String EXPORT;
     String CLASS;
-    String ID;
+    List<String> ID=new ArrayList<>();
+    String implementsWord;
     List<ClassMember> classMember = new ArrayList<>();
 
 
@@ -26,12 +27,20 @@ public class ClassDeclaration implements AST_Node {
         this.CLASS = CLASS;
     }
 
-    public String getID() {
+    public List<String> getID() {
         return ID;
     }
 
-    public void setID(String ID) {
+    public void setID(List<String> ID) {
         this.ID = ID;
+    }
+
+    public String getImplementsWord() {
+        return implementsWord;
+    }
+
+    public void setImplementsWord(String implementsWord) {
+        this.implementsWord = implementsWord;
     }
 
     public List<ClassMember> getClassMember() {
@@ -43,19 +52,39 @@ public class ClassDeclaration implements AST_Node {
     }
     @Override
     public String toString() {
-        if(classMember.isEmpty())
-            return "ClassDeclaration{" +
-                    "\n EXPORT= " + EXPORT +
-                    "\n CLASS=" + CLASS +
-                    "\n ID=" + ID +
-                    "\n classMember=" + "" +
-              "\n }";
-          else
-            return "ClassDeclaration{" +
-                    "\n EXPORT= " + EXPORT +
-                    "\n CLASS=" + CLASS +
-                    "\n ID=" + ID +
-                    "\n classMember=" + classMember +
-                    "\n }";
+        if(classMember.isEmpty()) {
+            if (implementsWord != null) {
+                return "ClassDeclaration{" +
+                        "\n EXPORT= " + EXPORT +
+                        "\n CLASS=" + CLASS +
+                        "\n ID=" + ID +
+                        "\n implements " + implementsWord +
+                        "\n }";
+            } else {
+                return "ClassDeclaration{" +
+                        "\n EXPORT= " + EXPORT +
+                        "\n CLASS=" + CLASS +
+                        "\n ID=" + ID +
+                        "\n }";
+            }
+        }
+        else{
+            if(implementsWord!=null){
+                return "ClassDeclaration{" +
+                        "\n EXPORT= " + EXPORT +
+                        "\n CLASS=" + CLASS +
+                        "\n ID=" + ID +
+                        "\n classMember=" + classMember +
+                        "\n implements " + implementsWord +
+                        "\n }";
+            }else {
+                return "ClassDeclaration{" +
+                        "\n EXPORT= " + EXPORT +
+                        "\n CLASS=" + CLASS +
+                        "\n ID=" + ID +
+                        "\n classMember=" + classMember +
+                        "\n }";
+            }
+        }
     }
 }

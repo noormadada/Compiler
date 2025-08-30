@@ -14,6 +14,15 @@ public class HtmlTag implements AST_Node {
     String templateTagId;
     String templateTagUl;
     String templateTagLi;
+    String TEMPLATE_TAG_FORM;
+
+    public String getTEMPLATE_TAG_FORM() {
+        return TEMPLATE_TAG_FORM;
+    }
+
+    public void setTEMPLATE_TAG_FORM(String TEMPLATE_TAG_FORM) {
+        this.TEMPLATE_TAG_FORM = TEMPLATE_TAG_FORM;
+    }
 
     public String getTemplateTagDiv() {
         return templateTagDiv;
@@ -169,7 +178,13 @@ public class HtmlTag implements AST_Node {
             return "HtmlTag{" +
                     ", templateTagUl='" + templateTagUl + '\'' +
                     '}';
-        } else  {
+        }
+        else if (TEMPLATE_TAG_FORM != null) {
+            return "HtmlTag{" +
+                    ", TEMPLATE_TAG_FORM='" + TEMPLATE_TAG_FORM + '\'' +
+                    '}';
+        }
+        else  {
             return "HtmlTag{" +
                     ", templateTagLi='" + templateTagLi + '\'' +
                     '}';

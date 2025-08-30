@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Angular App</title>
+<style>
+.container { padding: 20px; }
+    .product { border: 1px solid #000; padding: 10px; margin: 10px 0; direction: rtl; }
+    img { width: 100px; }
+    button { margin: 5px; }.details { border: 1px solid black; padding: 20px; direction: rtl; }
+    img { width: 300px; display: block; margin-top: 10px; }.form-container { padding: 20px; direction: rtl; }
+    label { display: block; margin: 10px 0; }
+    input, textarea { width: 100%; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+
+<script>
+const storageKey = 'products'; 
+let products = JSON.parse(localStorage.getItem(storageKey)) || [
+{id :1,name :'Product 1',image :'../images/1.jpg',details :'School book '},{id :2,name :'Product2',image :'../images/شنتة.jpg',details :'bag for Laptop '},{id :3,name :'Product 3',image :'../images/مقلمة.jpg',details :'School tools '},]; 
+let nextId = Math.max(0, ...products.map(products=>
+products.id)) + 1;
+
+function saveProducts() {
+localStorage.setItem(storageKey,JSON.stringify(products));
+}
+function getAll() {
+return products ;
+}
+function getById(id) {
+return products.find(products => products.id === id);
+}
+function add(product) {
+product.id = nextId++; 
+products.push(product); 
+  saveProducts();
+}
+function update(id ,updated) {
+const index = products.findIndex(products => products.id === id);
+if(index > -1) {
+  products[index] = { ...updated,id };
+  saveProducts();
+}
+}
+function deleteProduct(id) {
+products = products.filter(products => products.id !== id);
+  saveProducts();
+    ngOnInit();
+}
+function ngOnInit() {
+products = getAll();
+document.getElementById('app').innerHTML = `
+<div class="container"><button onclick="goToAdd()">addProduct</button>
+ ${products.map(product => `
+<div class="product"><h3>${product.name}</h3>
+<img src="${product.image}"/> 
+<p>${product.details}</p>
+<button onclick="viewDetails(${product.id})">show</button>
+<button onclick="editProduct(${product.id})">edit</button>
+<button onclick="deleteProduct(${product.id})">delete</button>
+</div>
+`).join('')}
+</div>
+`;
+}
+function viewDetails(id) {
+const url = `${location.pathname}?id=${id}`; 
+window.open(url,'_blank');}
+function editProduct(id) {
+const product = getById(id);
+ if (!product)return ;
+ProductFormComponent(product);
+}
+function goToAdd() {
+ProductFormComponent();
+}
+function ProductDetailsComponent(id){
+const product = getById(id);
+ if (!product)return ngOnInit();
+document.getElementById('app').innerHTML = `
+<div class="details"><h2>${product.name}</h2>
+<img src="${product.image}"/> 
+<p>${product.details}</p>
+</div>
+ `; 
+}
+function save(id) {
+const form = document.querySelector("form");
+const newProduct = {
+name:form.name.value,
+image:form.image.value,
+details:form.details.value
+};
+if(id!=null  && !isNaN(id)){
+update(id,newProduct);
+}
+else{
+add(newProduct);
+}
+ngOnInit();
+}
+function ProductFormComponent(product= { name: '',image: '',details: ''}){
+const isEdit = !!product.id;
+document.getElementById('app').innerHTML = `
+<div class="form-container"><h2>${isEdit? ' edit ': 'add'}Information</h2>
+<form><label>Name:<input required value="${product.name}" name="name"/> 
+</label>
+<br/> 
+<label>Link:<input required value="${product.image}" name="image"/> 
+</label>
+<br/> 
+<label>Information:<textarea ${product.details} name="details" required></textarea>
+</label>
+<br/> 
+<button type="button" onclick="save(${isEdit?product.id: 'null'})">saved</button>
+</form>
+</div>
+ `; 
+}
+function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.has('id') ? parseInt(params.get('id')) : null;
+    } const productIdFromURL = getIdFromUrl();
+    if (productIdFromURL) {
+ProductDetailsComponent(productIdFromURL);
+    } else {
+ngOnInit();
+    }
+
+</script>
+</body>
+</html>

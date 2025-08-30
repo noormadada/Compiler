@@ -29,7 +29,7 @@ public class DuplicateVariableChecker {
                     writer.write("Semantic Error: Duplicate variable '" + name + "' in class '" + classDecl.getID() + "'\n");
                     SymbolTablePrinter.print(symbolTable, List.of(name));
                 } else {
-                    symbolTable.define(new Symbol(name, "variable"));
+                    symbolTable.define(new Symbol(name, "Duplicate variable"));
                 }
             }
         }

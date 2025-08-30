@@ -17,30 +17,22 @@ public class SemanticAnalyzerVisitor {
 
             if (angularFile.getClassDeclaration() == null) return;
 
-            // التحقق من أسماء الكلاسات المكررة
             new ClassNameChecker(writer, symbolTable).check(angularFile);
 
             for (ClassDeclaration classDecl : angularFile.getClassDeclaration()) {
-
-                // التحقق من المتغيرات المكررة داخل الكلاس
                 new DuplicateVariableChecker(writer, symbolTable).check(classDecl);
-
-                // تعريف المتغيرات في جدول الرموز
                 for (ClassMember member : classDecl.getClassMember()) {
                     if (member.getVariableDeclaration() != null) {
                         defineVariable(member.getVariableDeclaration());
                     }
                 }
-
-                // التحقق من قواعد إضافية لكل متغير
                 for (ClassMember member : classDecl.getClassMember()) {
                     if (member.getVariableDeclaration() != null) {
                         VariableDeclaration var = member.getVariableDeclaration();
 
-                        // التحقق من مؤشرات المصفوفة
                         new ArrayIndexChecker(writer, symbolTable).check(var);
 
-                        // التحقق من المعرفات غير المعرفة
+
                         new UndefinedIdentifierChecker(writer, symbolTable).check(var);
 
                         Expression expr = var.getExpression();
@@ -52,25 +44,28 @@ public class SemanticAnalyzerVisitor {
                 }
             }
 
-            // التحقق من وجود template في @Component
-            if (angularFile.getDecorator() != null) {
-                new TemplateFieldChecker(writer, symbolTable).check(angularFile.getDecorator());
 
-                // التحقق من أخطاء CSS ضمن styles
-                ObjectLiteral objectLiteral = angularFile.getDecorator().getObjectLiteral();
-                for (ObjectField field : objectLiteral.getObjectField()) {
-                    if (field instanceof StylesField stylesField) {
-                        StyleArray styleArray = stylesField.getStyleArray();
-                        for (CssLiteral cssLiteral : styleArray.getCssLiteral()) {
-                            new InvalidCssPropertyNameChecker(writer, symbolTable).check(cssLiteral);
+            if (angularFile.getDecorator() != null) {
+                for (Decorator decorator : angularFile.getDecorator()) {
+                    new TemplateFieldChecker(writer, symbolTable).check(decorator);
+
+
+                    ObjectLiteral objectLiteral = decorator.getObjectLiteral();
+                    for (ObjectField field : objectLiteral.getObjectField()) {
+                        if (field instanceof StylesField stylesField) {
+                            StyleArray styleArray = stylesField.getStyleArray();
+                            for (CssLiteral cssLiteral : styleArray.getCssLiteral()) {
+                                new InvalidCssPropertyNameChecker(writer, symbolTable).check(cssLiteral);
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 
-    // تعريف المتغيرات (مصفوفة أو متغير عادي)
+
     private void defineVariable(VariableDeclaration varDecl) {
         String name = varDecl.getID();
         Expression expr = varDecl.getExpression();

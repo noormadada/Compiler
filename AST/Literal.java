@@ -1,10 +1,28 @@
 package AST;
 
 public class Literal implements AST_Node {
+    String  template_id;
     String  stringLiteral;
     String number ;
     String trueId;
     String falseId;
+    TemplateLiteral templateLiteral;
+
+    public String getTemplate_id() {
+        return template_id;
+    }
+
+    public void setTemplate_id(String template_id) {
+        this.template_id = template_id;
+    }
+
+    public TemplateLiteral getTemplateLiteral() {
+        return templateLiteral;
+    }
+
+    public void setTemplateLiteral(TemplateLiteral templateLiteral) {
+        this.templateLiteral = templateLiteral;
+    }
 
     public String getStringLiteral() {
         return stringLiteral;
@@ -52,7 +70,16 @@ public class Literal implements AST_Node {
             return "\nLiteral{" +
                     "\ntrueId='" + trueId + '\'' +
                     "\n }";
-        }else {
+
+        }  else if (template_id!=null) {
+            return "\nLiteral{" +
+                    "\ntemplate_id='" + template_id + '\'' +
+                    "\n }";
+        } else if (templateLiteral!=null) {
+            return "\nLiteral{" +
+                    "\ntemplateLiteral='" + templateLiteral + '\'' +
+                    "\n }";
+        } else {
             return "\nLiteral{" +
                     "\nfalseId='" + falseId + '\'' +
                     "\n }";

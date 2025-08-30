@@ -6,6 +6,16 @@ HtmlSelfClosingChunk htmlSelfClosingChunk;
 InterpolationChunk interpolationChunk;
 HtmlCloseTagChunk htmlCloseTagChunk;
 Html_Id htmlId;
+String TEMPLATE_TEXT;
+
+
+    public String getTEMPLATE_TEXT() {
+        return TEMPLATE_TEXT;
+    }
+
+    public void setTEMPLATE_TEXT(String TEMPLATE_TEXT) {
+        this.TEMPLATE_TEXT = TEMPLATE_TEXT;
+    }
 
     public HtmlElementChunk getHtmlElementChunk() {
         return htmlElementChunk;
@@ -65,7 +75,13 @@ Html_Id htmlId;
             return "HtmlChunk{" +
                     "interpolationChunk=" + interpolationChunk +
                     '}';
-        }else {
+        }
+        else if (TEMPLATE_TEXT!=null) {
+            return "HtmlChunk{" +
+                    "TEMPLATE_TEXT=" + TEMPLATE_TEXT +
+                    '}';
+        }
+        else {
             return "HtmlChunk{" +
                     "htmlId=" + htmlId +
                     '}';

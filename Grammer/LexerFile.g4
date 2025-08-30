@@ -15,6 +15,8 @@ IF: 'if';
 ELSE: 'else';
 CONST: 'const';
 FALSE: 'false';
+CONSTRUCTOR: 'constructor';
+LET: 'let';
 COLON: ':';
 SEMI: ';';
 COMMA: ',';
@@ -31,6 +33,7 @@ GT: '>';
 SLASH: '/';
 PLUS: '+';
 INTERJECTION:'!';
+QMark :'?';
 MINUS :'-';
 PRIVATE: 'private';
 SPREAD: '...';
@@ -67,6 +70,7 @@ TEMPLATE_QUOTE: '"' | '\'';
 TEMPLATE_STRING: '"' (~["\\] | '\\' .)* '"'
                | '\'' (~['\\] | '\\' .)* '\'';
 
+
 TEMPLATE_TAG_DIV: 'div';
 TEMPLATE_TAG_SPAN: 'span';
 TEMPLATE_TAG_SECTION: 'section';
@@ -79,6 +83,7 @@ TEMPLATE_TAG_UL: 'ul';
 TEMPLATE_TAG_LI: 'li';
 TEMPLATE_TAG_BUTTON: 'button';
 TEMPLATE_TAG_INPUT: 'input';
+TEMPLATE_TAG_FORM: 'form';
 
 TEMPLATE_ID: [a-zA-Z_][a-zA-Z0-9_-]*
            | [a-zA-Z_][a-zA-Z0-9_-]* ':'

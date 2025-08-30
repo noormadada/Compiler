@@ -4,36 +4,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IdentifierExpr extends Expression implements AST_Node{
-    List<String> Id=new ArrayList<>();
-    List<Literal> literal=new ArrayList<>();
+    List<String> id = new ArrayList<>();
+    List<String> as = new ArrayList<>();
+    List<Expression> expressionList= new ArrayList<>();
 
     public List<String> getId() {
-        return Id;
+        return id;
     }
 
     public void setId(List<String> id) {
-        Id = id;
+        this.id = id;
     }
 
-    public List<Literal> getLiteral() {
-        return literal;
+    public List<String> getAs() {
+        return as;
     }
 
-    public void setLiteral(List<Literal> literal) {
-        this.literal = literal;
+    public void setAs(List<String> as) {
+        this.as = as;
     }
+
+    public List<Expression> getExpressionList() {
+        return expressionList;
+    }
+
+    public void setExpressionList(List<Expression> expressionList) {
+        this.expressionList = expressionList;
+    }
+
 
     @Override
     public String toString() {
-        if(literal.isEmpty()){
+        if(as!=null)
             return "IdentifierExpr{" +
-                    "Id=" + Id +
+                    "\n id=" + id +
+                    "\n as='" + as +
+                    "\n expressionList=" + " " +
                     '}';
-        }else {
+        else if (!expressionList.isEmpty())
             return "IdentifierExpr{" +
-                    "Id=" + Id +
-                    ", literal=" + literal +
+                    "\n id=" + id +
+                    "\n as='" +  " " +
+                    "\n expressionList=" + expressionList +
                     '}';
-        }
+        else
+            return "IdentifierExpr{" +
+                    "\n id=" + id +
+                    "\n  as='" +  " " +
+                    "\n expressionList=" + " " +
+                    '}';
+
     }
 }

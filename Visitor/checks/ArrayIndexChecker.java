@@ -1,9 +1,6 @@
 package Visitor.checks;
 
-import AST.Expression;
-import AST.IdentifierExpr;
-import AST.Literal;
-import AST.VariableDeclaration;
+import AST.*;
 import SymbolTable.Symbol;
 import SymbolTable.SymbolTable;
 import SymbolTable.SymbolTablePrinter;
@@ -20,39 +17,49 @@ public class ArrayIndexChecker {
         this.writer = writer;
         this.symbolTable = symbolTable;
     }
-
     public void check(VariableDeclaration varDecl) throws IOException {
         Expression expr = varDecl.getExpression();
 
-        if (expr instanceof IdentifierExpr identifierExpr) {
-            List<String> ids = identifierExpr.getId();
-            List<Literal> literals = identifierExpr.getLiteral();
+        if (expr instanceof AST.ArrayAccessExpr arrayAccessExpr) {
 
+            List<Expression> expressions = arrayAccessExpr.getExpressionList();
+            if (expressions.size() == 2) {
 
+                Expression arrayExpr = expressions.get(0);
+                Expression indexExpr = expressions.get(1);
 
-            if (!ids.isEmpty() && !literals.isEmpty()) {
-                String varName = ids.get(ids.size() - 1);
-                String indexStr = literals.get(0).getNumber();
-                Symbol symbol = symbolTable.resolve(varName);
+                if (arrayExpr instanceof AST.PropertyAccess propertyAccess) {
 
-                if (symbol != null && "array".equals(symbol.getType())) {
-                    try {
-                        int index = Integer.parseInt(indexStr);
-                        if (index < 0 || index >= symbol.getArrayLength()) {
-                            writer.write(String.format(
-                                    "Semantic Error: Index %d out of bounds for array '%s' with length %d%n",
-                                    index, varName, symbol.getArrayLength()));
-                            SymbolTablePrinter.print(symbolTable, List.of(varName));
+                    Expression target = propertyAccess.getExpression();
+                    String arrayName = propertyAccess.getId();
+
+                    if (target instanceof AST.ThisExpr && indexExpr instanceof AST.LiteralExpr literalExpr) {
+                        Literal literal = literalExpr.getLiteral();
+                        String indexStr = literal.getNumber();
+
+                        if (indexStr != null) {
+                            Symbol symbol = symbolTable.resolve(arrayName);
+                            if (symbol != null && "array".equals(symbol.getType())) {
+                                try {
+                                    int index = Integer.parseInt(indexStr);
+                                    if (index < 0 || index >= symbol.getArrayLength()) {
+                                        writer.write(String.format(
+                            "Semantic Error: Index %d out of bounds for array '%s' with length %d%n",
+          index, arrayName, symbol.getArrayLength()));
+           SymbolTablePrinter.print(symbolTable, List.of(arrayName));
+                                    }
+                                } catch (NumberFormatException e) {
+                                    writer.write(String.format(
+                                            "Semantic Error: Invalid array index '%s' for array '%s'%n",
+                                            indexStr, arrayName));
+                                }
+                            }
                         }
-                    } catch (NumberFormatException e) {
-                        writer.write(String.format(
-                                "Semantic Error: Invalid array index '%s' for array '%s'%n",
-                                indexStr, varName));
                     }
                 }
             }
-
         }
     }
+
 
 }

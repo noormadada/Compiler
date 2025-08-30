@@ -6,13 +6,9 @@ options {
     tokenVocab = LexerFile;
 }
 
+
 angularFile
-    : importStatement*
-      decorator*
-      (classDeclaration
-      | constExportStatement
-      | expressionStatement)* // ← أضف هذا السطر
-      EOF
+    : (importStatement* decorator* (classDeclaration | constExportStatement | expressionStatement)+)+ EOF
     ;
 
 
@@ -49,11 +45,11 @@ spreadField
     ;
 
 expression
-    : SEMI? THIS                                             # ThisExpr
+    : SEMI? SPREAD? THIS                                             # ThisExpr
     | THIS DOT ID                                            # ThisPropertyExpr
     | THIS DOT ID LPAREN (expression (COMMA expression)*)? RPAREN # ThisCallExpr
     | ID ((DOT ID(AS)?) | (LSQUARE expression RSQUARE))*          # IdentifierExpr
-    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID                      # IdentifierExpr2
+    | ID ASSIGN GT ID DOT ID INTERJECTION? ASSIGN+ ID             # IdentifierExpr2
     | ID GT MINUS NUMBER                                     # IdentifierExpr3
     | literal                                                # LiteralExpr
     | templateLiteral                                        # TemplateExpr
@@ -62,8 +58,8 @@ expression
     | objectLiteral                                          # ObjectExpr
     | LBRACE (objectField (COMMA objectField)* (COMMA spreadField)? | spreadField (COMMA spreadField)*)? RBRACE # SpreadObjectExpr
     | expression DOT ID                                      # PropertyAccess
-    | expression LSQUARE expression RSQUARE                  # ArrayAccessExpr      // ← أضف هذا السطر
-    | expression LPAREN (expression (COMMA expression)*)? RPAREN # CallExpr
+    | expression LSQUARE expression RSQUARE                  # ArrayAccessExpr
+    | expression LPAREN (expression (COMMA expression)*)? (ID ASSIGN GT ID DOT ID)? RPAREN # CallExpr
     | PLUS expression                                        # UnaryExpr
     | expression PLUS expression                             # BinaryExpr
     | LPAREN expression RPAREN                               # ParenthesizedExpr
@@ -165,6 +161,7 @@ htmlTag
     | TEMPLATE_TAG_LI
     | TEMPLATE_TAG_BUTTON
     | TEMPLATE_TAG_INPUT
+    | TEMPLATE_TAG_FORM
     | TEMPLATE_ID
     ;
 
@@ -190,6 +187,11 @@ classDeclaration
 classMember
     : variableDeclaration
     | functionDeclaration
+    | consrtuctor
+    ;
+
+consrtuctor
+    : CONSTRUCTOR LPAREN parameterList? RPAREN (COLON (ID | ANY | VOID))? block
     ;
 
 variableDeclaration
@@ -248,7 +250,7 @@ expressionStatement
     ;
 
 assignmentStatement
-    : expression ASSIGN expression SEMI
+    : expression ASSIGN expression  (QMark ID DOT ID LPAREN ID RPAREN COLON)? SEMI?
     ;
 
 methodCallStatement
@@ -264,9 +266,8 @@ ifStatement
     ;
 
 constDeclaration
-    : CONST ID ASSIGN expression SEMI?
+    : (CONST|LET) ID ASSIGN expression SEMI?
     ;
 constExportStatement
     : EXPORT CONST ID COLON type ASSIGN expression SEMI
     ;
-
