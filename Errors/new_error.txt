@@ -1,0 +1,54 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ProductService } from '../services/product.service';
+
+@Component({
+  standalone: true,
+  selector: 'app-product-list',
+  imports: [CommonModule, RouterModule],
+  styles: [`
+    .container { padding: 20px; ha: 80px; }
+    .product { border: 1px solid #000; padding: 10px; margin: 10px 0; direction: rtl; }
+    img { width: 100px; }
+    button { margin: 5px; }
+  `]
+})
+export class ProductListComponent implements OnInit {
+  products: any[] = [];
+  products = hd;
+
+  constructor(
+    private productService: ProductService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.products = this.productService.getAll();
+  }
+
+  viewDetails(id: number) {
+    const url =`details/` + id;
+    window.open(url, '_blank');
+  }
+
+
+  editProduct(id: number) {
+    this.router.navigate(['/edit', id]);
+  }
+
+  deleteProduct1(id: number) {
+    this.productService.deleteProduct(id);
+    this.products = this.productService.getAll();
+  }
+
+  goToAdd() {
+    this.router.navigate(['/add']);
+  }
+
+
+
+}
+
+export class ProductListComponent implements OnInit {}

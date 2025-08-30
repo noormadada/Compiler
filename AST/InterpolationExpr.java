@@ -4,7 +4,26 @@ public class InterpolationExpr implements AST_Node{
     String InterpolationId;
     String InterpolationString;
     String InterpolationNumber;
+    String INTERPOLATION_NTERROGATIVE;
+    String INTERPOLATION_COLON;
     InterpolationFullExpr interpolationFullExpr;
+
+
+    public String getINTERPOLATION_NTERROGATIVE() {
+        return INTERPOLATION_NTERROGATIVE;
+    }
+
+    public String getINTERPOLATION_COLON() {
+        return INTERPOLATION_COLON;
+    }
+
+    public void setINTERPOLATION_COLON(String INTERPOLATION_COLON) {
+        this.INTERPOLATION_COLON = INTERPOLATION_COLON;
+    }
+
+    public void setINTERPOLATION_NTERROGATIVE(String INTERPOLATION_NTERROGATIVE) {
+        this.INTERPOLATION_NTERROGATIVE = INTERPOLATION_NTERROGATIVE;
+    }
 
     public String getInterpolationId() {
         return InterpolationId;
@@ -53,6 +72,14 @@ public class InterpolationExpr implements AST_Node{
         } else if (interpolationFullExpr!=null) {
             return "InterpolationExpr{" +
                     "interpolationFullExpr='" + interpolationFullExpr + '\'' +
+                    '}';
+        }  else if (INTERPOLATION_NTERROGATIVE!=null) {
+            return "InterpolationExpr{" +
+                    "INTERPOLATION_NTERROGATIVE='" + INTERPOLATION_NTERROGATIVE + '\'' +
+                    '}';
+        }  else if (INTERPOLATION_COLON!=null) {
+            return "InterpolationExpr{" +
+                    "INTERPOLATION_COLON='" + INTERPOLATION_COLON + '\'' +
                     '}';
         } else {
             return "InterpolationExpr{" +

@@ -1,82 +1,54 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ProductService } from '../services/product.service';
+import { Injectable } from '@angular/core';
 
-@Component({
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="details" *ngIf="product">
-      <h2>{{ product.name }}</h2>
-      <img [src]="product.image" />
-      <p>{{ product.details }}</p>
-    </div>
-  `,
-  styles: [`
-    .details { border: 1px solid black; padding: 20px; direction: rtl; }
-    img { width: 300px; display: block; margin-top: 10px; }
-  `]
-})
-export class ProductDetailsComponent {
-  product: any;
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+  private storageKey = 'products';
+  products: any[] = [];
+  nextId = 1;
 
-  constructor(private route: ActivatedRoute, private productService: ProductService) {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.product = this.productService.getById(id);
+  constructor() {
+     let stored = localStorage.getItem(this.storageKey);
+    this.products = stored ? JSON.parse(stored) : [
+      { id: 1, name: 'Product 1', image: '../images/1.jpg', details: 'School book ' },
+      { id: 2, name: 'Product2', image: '../images/شنتة.jpg', details: 'bag for Laptop ' },
+      { id: 3, name: 'Product 3', image: '../images/مقلمة.jpg', details: 'School tools ' }
+    ];
+    this.nextId = Math.max(0, ...this.products.map(products => products.id)) + 1;
+    this.save   Products();
   }
-}
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ProductService } from '../services/product.service';
 
+    saveProducts() {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.products));
+  }
 
-@Component({
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
-    <div class="form-container">
-      <h2>{{ isEdit ? 'تعديل' : 'إضافة' }} منتج</h2>
-      <form (ngSubmit)="save()">
-        <label>الاسم: <input [(ngModel)]="product.name" name="name" required /></label><br />
-        <label>الرابط: <input [(ngModel)]="product.image" name="image" required /></label><br />
-        <label>التفاصيل: <textarea [(ngModel)]="product.details" name="details" required></textarea></label><br />
-        <button type="submit">حفظ</button>
-      </form>
-    </div>
-  `,
-  styles: [`
-    .form-container { padding: 20px; direction: rtl; }
-    label { display: block; margin: 10px 0; }
-    input, textarea { width: 100%; }
-  `]
-})
-export class ProductFormComponent {
-  product = { name: '', image: '', details: '' };
-  isEdit = false;
-  id: number = 0;
+  getAll() {
+    return this.products;
+  }
 
-  constructor(private route: ActivatedRoute, private router: Router, private productService: ProductService) {
-    const paramId = this.route.snapshot.paramMap.get('id');
-    if (paramId) {
-      this.isEdit = true;
-      this.id = +paramId;
-      const existing = this.productService.getById(this.id);
-      if (existing) this.product = { ...existing };
+  getById(id: number) {
+    return this.products.find(products => products.id === id);
+  }
+
+  add(product: any) {
+    product.id = this.nextId++;
+    this.products.push(product);
+    this.saveProducts();
+  }
+
+  update(id: number, updated: any) {
+    const index = this.products.findIndex(products => products.id === id);
+    if (index > -1) {
+      this.products[index] = { ...updated, id };
+      this.saveProducts();
     }
   }
 
-  save() {
-    if (this.isEdit) {
-      this.productService.update(this.id, this.product);
-    } else {
-      this.productService.add(this.product);
-    }
-    this.router.navigate(['/']);
+  deleteProduct(id: number) {
+    this.products = this.products.filter(products => products.id !== id);
+    this.saveProducts();
   }
 }
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -89,14 +61,14 @@ import { ProductService } from '../services/product.service';
   imports: [CommonModule, RouterModule],
   template: `
     <div class="container">
-      <button (click)="goToAdd()">➕ إضافة منتج</button>
+      <button (click)="goToAdd()">addProduct</button>
       <div *ngFor="let product of products" class="product">
         <h3>{{ product.name }}</h3>
         <img [src]="product.image" />
         <p>{{ product.details }}</p>
-        <button (click)="viewDetails(product.id)">عرض التفاصيل</button>
-        <button (click)="editProduct(product.id)">تعديل</button>
-        <button (click)="deleteProduct(product.id)">حذف</button>
+        <button (click)="viewDetails(product.id)">show</button>
+        <button (click)="editProduct(product.id)">edit</button>
+        <button (click)="deleteProduct1(product.id)">delete</button>
       </div>
     </div>
   `,
@@ -128,8 +100,8 @@ export class ProductListComponent implements OnInit {
     this.router.navigate(['/edit', id]);
   }
 
-  deleteProduct(id: number) {
-    this.productService.delete(id);
+  deleteProduct1(id: number) {
+    this.productService.deleteProduct(id);
     this.products = this.productService.getAll();
   }
 
@@ -137,53 +109,90 @@ export class ProductListComponent implements OnInit {
     this.router.navigate(['/add']);
   }
 }
-import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
-export class ProductService {
-  private storageKey = 'products';
-  products: any[] = [];
-  nextId = 1;
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ProductService } from '../services/product.service';
 
-  constructor() {
-    const stored = localStorage.getItem(this.storageKey);
-    this.products = stored ? JSON.parse(stored) : [
-      { id: 1, name: 'منتج 1', image: 'product1.png', details: 'تفاصيل المنتج 1' },
-      { id: 2, name: 'منتج 2', image: 'product2.png', details: 'تفاصيل المنتج 2' }
-    ];
-    this.nextId = Math.max(0, ...this.products.map(p => p.id)) + 1;
-    this.save();
+@Component({
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="details" *ngIf="product">
+      <h2>{{ product.name }}</h2>
+      <img [src]="product.image" />
+      <p>{{ product.details }}</p>
+    </div>
+  `,
+  styles: [`
+    .details { border: 1px solid black; padding: 20px; direction: rtl; }
+    img { width: 300px; display: block; margin-top: 10px; }
+  `]
+})
+export class ProductDetailsComponent {
+  product: any;
+
+  constructor(private route: ActivatedRoute, private productService: ProductService) {
+   let id = Number(this.route.snapshot.paramMap.get('id'));
+    this.product = this.productService.getById(id);
   }
+}
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ProductService } from '../services/product.service';
 
-   save() {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.products));
-  }
 
-  getAll() {
-    return this.products;
-  }
+@Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <div class="form-container">
+    <h2>{{ isEdit ? ' edit ' : 'add' }} Information</h2>
+    <form>
+      <label>Name:
+        <input [(ngModel)]="product.name" name="name" required />
+      </label><br />
+      <label>Link:
+        <input [(ngModel)]="product.image" name="image" required />
+      </label><br />
+      <label>Information:
+        <textarea [(ngModel)]="product.details" name="details" required></textarea>
+      </label><br />
+      <button type="button" (click)="save()">saved</button>
+    </form>
+  </div>
+  `,
+  styles: [`
+    .form-container { padding: 20px; direction: rtl; }
+    label { display: block; margin: 10px 0; }
+    input, textarea { width: 100%; }
+  `]
+})
+export class ProductFormComponent {
+  product = { name: '', image: '', details: '' };
+  isEdit = false;
+  id: number = 0;
 
-  getById(id: number) {
-    return this.products.find(p => p.id === id);
-  }
-
-  add(product: any) {
-    product.id = this.nextId++;
-    this.products.push(product);
-    this.save();
-  }
-
-  update(id: number, updated: any) {
-    const index = this.products.findIndex(p => p.id === id);
-    if (index > -1) {
-      this.products[index] = { ...updated, id };
-      this.save();
+  constructor(private route: ActivatedRoute, private router: Router, private productService: ProductService) {
+    let paramId = this.route.snapshot.paramMap.get('id');
+    if (paramId) {
+      this.isEdit = true;
+      this.id = +paramId;
+      const existing = this.productService.getById(this.id);
+      if (existing) this.product = { ...existing };
     }
   }
 
-  delete(id: number) {
-    this.products = this.products.filter(p => p.id !== id);
-    this.save();
+  save() {
+    if (this.isEdit) {
+      this.productService.update(this.id, this.product);
+    } else {
+      this.productService.add(this.product);
+    }
+    this.router.navigate(['/']);
   }
 }
 

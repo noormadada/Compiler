@@ -161,6 +161,7 @@ htmlTag
     | TEMPLATE_TAG_LI
     | TEMPLATE_TAG_BUTTON
     | TEMPLATE_TAG_INPUT
+    | TEMPLATE_TAG_FORM
     | TEMPLATE_ID
     ;
 
@@ -186,6 +187,11 @@ classDeclaration
 classMember
     : variableDeclaration
     | functionDeclaration
+    | consrtuctor
+    ;
+
+consrtuctor
+    : CONSTRUCTOR LPAREN parameterList? RPAREN (COLON (ID | ANY | VOID))? block
     ;
 
 variableDeclaration
@@ -260,7 +266,7 @@ ifStatement
     ;
 
 constDeclaration
-    : CONST ID ASSIGN expression SEMI?
+    : (CONST|LET) ID ASSIGN expression SEMI?
     ;
 constExportStatement
     : EXPORT CONST ID COLON type ASSIGN expression SEMI

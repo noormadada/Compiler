@@ -147,13 +147,13 @@ public class BaseVisitor extends ParserFileBaseVisitor {
 
         SpreadObjectExpr spreadObjectExpr = new SpreadObjectExpr();
 
-        if(ctx.objectField().isEmpty()){
+        if(!ctx.objectField().isEmpty()){
             for (int i = 0; i < ctx.objectField().size(); i++) {
                 spreadObjectExpr.getObjectFieldList().add((ObjectField)visit(ctx.objectField(i)) );
             }
         }
 
-        if(ctx.spreadField().isEmpty()){
+        if(!ctx.spreadField().isEmpty()){
             for (int i = 0; i < ctx.spreadField().size(); i++) {
                 spreadObjectExpr.getSpreadFieldList().add(visitSpreadField(ctx.spreadField(i)) );
             }
@@ -179,7 +179,7 @@ public class BaseVisitor extends ParserFileBaseVisitor {
     public BinaryExpr visitBinaryExpr(ParserFile.BinaryExprContext ctx) {
 
         BinaryExpr binaryExpr = new BinaryExpr();
-        if(ctx.expression().isEmpty()){
+        if(!ctx.expression().isEmpty()){
             for (int i = 0; i < ctx.expression().size(); i++) {
 
                 binaryExpr.getExpressionList().add((Expression)visit(ctx.expression(i)));
@@ -415,7 +415,11 @@ public class BaseVisitor extends ParserFileBaseVisitor {
     @Override
     public ConstDeclaration visitConstDeclaration(ParserFile.ConstDeclarationContext ctx) {
         ConstDeclaration constDeclaration=new ConstDeclaration();
-        constDeclaration.setCONST(ctx.CONST().getText());
+        if(ctx.CONST()!=null){
+            constDeclaration.setCONST(ctx.CONST().getText());}
+        if(ctx.LET()!=null){
+            constDeclaration.setLET(ctx.LET().getText());}
+
         constDeclaration.setID(ctx.ID().getText());
         constDeclaration.setExpression((Expression) visit(ctx.expression()));
 
@@ -596,6 +600,9 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         }if(ctx.functionDeclaration()!=null){
             classMember.setFunctionDeclaration(visitFunctionDeclaration(ctx.functionDeclaration()));
         }
+        if(ctx.consrtuctor()!=null){
+            classMember.setConstructor(visitConsrtuctor(ctx.consrtuctor()));
+        }
         return  classMember;
     }
 
@@ -700,6 +707,9 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         if (ctx.TEMPLATE_ID() != null) {
             htmlTag.setTemplateTagId(ctx.TEMPLATE_ID().getText());
         }
+        if(ctx.TEMPLATE_TAG_FORM() !=null){
+            htmlTag.setTEMPLATE_TAG_FORM(ctx.TEMPLATE_TAG_FORM().getText());
+        }
         return htmlTag;
     }
 
@@ -767,6 +777,12 @@ public class BaseVisitor extends ParserFileBaseVisitor {
 
         if (ctx.INTERPOLATION_STRING() != null) {
             interpolationExpr.setInterpolationId(ctx.INTERPOLATION_STRING().getText());
+        }
+        if (ctx.INTERPOLATION_NTERROGATIVE() != null) {
+            interpolationExpr.setINTERPOLATION_NTERROGATIVE(ctx.INTERPOLATION_NTERROGATIVE().getText());
+        }
+        if (ctx.INTERPOLATION_COLON() != null) {
+            interpolationExpr.setINTERPOLATION_COLON(ctx.INTERPOLATION_COLON().getText());
         }
         if(ctx.interpolationFullExpr()!=null){
             interpolationExpr.setInterpolationFullExpr(visitInterpolationFullExpr(ctx.interpolationFullExpr()));
@@ -949,4 +965,27 @@ public class BaseVisitor extends ParserFileBaseVisitor {
         return literal;
     }
 
+
+    @Override
+    public Constructor visitConsrtuctor(ParserFile.ConsrtuctorContext ctx) {
+        Constructor constructor=new Constructor();
+
+         if(ctx.ID()!=null){
+             constructor.setId(ctx.ID().getText());}
+
+        if(ctx.parameterList()!=null){
+            constructor.setParameterList(visitParameterList(ctx.parameterList()));
+        }
+        if(ctx.ANY()!=null){
+            constructor.setANY(ctx.ANY().getText());
+        }
+        if(ctx.VOID()!=null){
+            constructor.setVOID(ctx.VOID().getText());
+        }
+        constructor.setBlock(visitBlock(ctx.block()));
+        constructor.setConstructor(ctx.CONSTRUCTOR().getText());
+
+        return constructor;
+
+    }
 }

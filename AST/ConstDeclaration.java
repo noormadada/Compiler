@@ -3,6 +3,16 @@ package AST;
 public class ConstDeclaration implements AST_Node{
     String CONST ;
     String ID;
+    String LET;
+
+    public String getLET() {
+        return LET;
+    }
+
+    public void setLET(String LET) {
+        this.LET = LET;
+    }
+
     Expression expression;
 
     public String getCONST() {
@@ -31,11 +41,23 @@ public class ConstDeclaration implements AST_Node{
     @Override
     public String toString() {
 
-        return "ConstDeclaration{" +
-                ", CONST=" + CONST +
-                "ID='" + ID + '\'' +
-                "expression='" + expression + '\'' +
+        if(LET!=null){
+            return "ConstDeclaration{" +
+                    ", LET=" + LET +
+                    "ID='" + ID + '\'' +
+                    "expression='" + expression + '\'' +
 
-                '}';
+                    '}';
+        }
+        else
+        {
+            return "ConstDeclaration{" +
+                    ", CONST=" + CONST +
+                    "ID='" + ID + '\'' +
+                    "expression='" + expression + '\'' +
+
+                    '}';
+        }
+
     }
 }

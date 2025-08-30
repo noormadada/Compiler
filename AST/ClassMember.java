@@ -3,6 +3,7 @@ package AST;
 public class ClassMember implements AST_Node {
     VariableDeclaration variableDeclaration;
     FunctionDeclaration  functionDeclaration;
+    Constructor constructor;
 
     public VariableDeclaration getVariableDeclaration() {
         return variableDeclaration;
@@ -19,6 +20,15 @@ public class ClassMember implements AST_Node {
     public void setFunctionDeclaration(FunctionDeclaration functionDeclaration) {
         this.functionDeclaration = functionDeclaration;
     }
+
+    public Constructor getConstructor() {
+        return constructor;
+    }
+
+    public void setConstructor(Constructor constructor) {
+        this.constructor = constructor;
+    }
+
     @Override
     public String toString() {
         if(variableDeclaration!=null) {
@@ -26,9 +36,14 @@ public class ClassMember implements AST_Node {
                     "\n variableDeclaration= " + variableDeclaration +
                     "\n }";
         }
-          else
+          else if (functionDeclaration!=null){
             return "ClassMember{" +
                     "\n functionDeclaration= " + functionDeclaration +
+                    "\n }";}
+          else
+            return "ClassMember{" +
+                    "\n Constructor= " + constructor +
                     "\n }";
+
     }
 }

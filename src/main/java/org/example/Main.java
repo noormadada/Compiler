@@ -31,11 +31,12 @@ public class Main {
         String sourceCode = Files.readString(Paths.get(source));
         // System.out.print(doc);
 
-        //SemanticAnalyzerVisitor semanticAnalyzer = new SemanticAnalyzerVisitor();
-        //semanticAnalyzer.analyze(doc);
+       // SemanticAnalyzerVisitor semanticAnalyzer = new SemanticAnalyzerVisitor();
+       // semanticAnalyzer.analyze(doc);
 
         Generator generator = new Generator(sourceCode);
         generator.generate(doc);
+
 
 
     }

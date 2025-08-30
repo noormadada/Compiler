@@ -17,21 +17,21 @@ public class ArrayIndexChecker {
         this.writer = writer;
         this.symbolTable = symbolTable;
     }
-
     public void check(VariableDeclaration varDecl) throws IOException {
         Expression expr = varDecl.getExpression();
 
-        // التأكد أن التعبير هو من النوع ArrayAccessExpr
         if (expr instanceof AST.ArrayAccessExpr arrayAccessExpr) {
+
             List<Expression> expressions = arrayAccessExpr.getExpressionList();
             if (expressions.size() == 2) {
-                Expression arrayExpr = expressions.get(0); // this.products
-                Expression indexExpr = expressions.get(1); // 3
 
-                // إذا كان التعبير الأول هو PropertyAccess
+                Expression arrayExpr = expressions.get(0);
+                Expression indexExpr = expressions.get(1);
+
                 if (arrayExpr instanceof AST.PropertyAccess propertyAccess) {
-                    Expression target = propertyAccess.getExpression(); // this
-                    String arrayName = propertyAccess.getId();          // products
+
+                    Expression target = propertyAccess.getExpression();
+                    String arrayName = propertyAccess.getId();
 
                     if (target instanceof AST.ThisExpr && indexExpr instanceof AST.LiteralExpr literalExpr) {
                         Literal literal = literalExpr.getLiteral();
@@ -39,15 +39,14 @@ public class ArrayIndexChecker {
 
                         if (indexStr != null) {
                             Symbol symbol = symbolTable.resolve(arrayName);
-
                             if (symbol != null && "array".equals(symbol.getType())) {
                                 try {
                                     int index = Integer.parseInt(indexStr);
                                     if (index < 0 || index >= symbol.getArrayLength()) {
                                         writer.write(String.format(
-                                                "Semantic Error: Index %d out of bounds for array '%s' with length %d%n",
-                                                index, arrayName, symbol.getArrayLength()));
-                                        SymbolTablePrinter.print(symbolTable, List.of(arrayName));
+                            "Semantic Error: Index %d out of bounds for array '%s' with length %d%n",
+          index, arrayName, symbol.getArrayLength()));
+           SymbolTablePrinter.print(symbolTable, List.of(arrayName));
                                     }
                                 } catch (NumberFormatException e) {
                                     writer.write(String.format(

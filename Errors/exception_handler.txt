@@ -1,49 +1,44 @@
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Invalid CSS property name 'ha'
+Semantic Error: Duplicate class name '[ProductListComponent, OnInit]' found.
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Invalid CSS property name 'ha'
+Semantic Error: Duplicate class name '[ProductListComponent, OnInit]' found.
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Invalid CSS property name 'ha'
+Semantic Error: Duplicate class name '[ProductListComponent, OnInit]' found.
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Invalid CSS property name 'ha'
+Semantic Error: Duplicate class name '[ProductListComponent, OnInit]' found.
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Invalid CSS property name 'ha'
+Semantic Error: Duplicate class name '[ProductListComponent, OnInit]' found.
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
+Semantic Error: Variable 'hd' used but not defined.
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Invalid CSS property name 'ha'
+Semantic Error: Duplicate class name '[AppComponent]' found.
+Semantic Error: Index 3 out of bounds for array 'products' with length 3
+Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Invalid CSS property name 'dd'
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
 Semantic Error: Duplicate variable 'product' in class '[ProductFormComponent]'
-Semantic Error: Duplicate variable 'products' in class '[ProductService]'
 Semantic Error: Missing 'template' field in @Component decorator.
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
 Semantic Error: Duplicate variable 'product' in class '[ProductFormComponent]'
-Semantic Error: Duplicate variable 'products' in class '[ProductService]'
 Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Duplicate class name '[AppComponent]' found.
-Semantic Error: Duplicate variable 'selectedProduct' in class '[AppComponent]'
-Semantic Error: Index 3 out of bounds for array 'products' with length 3
-Semantic Error: Variable 'pp' used but not defined.
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
+Semantic Error: Duplicate variable 'product' in class '[ProductFormComponent]'
 Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Invalid CSS property name 'dd'
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
+Semantic Error: Duplicate variable 'product' in class '[ProductFormComponent]'
 Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Duplicate class name '[ProductFormComponent]' found.
-Semantic Error: Duplicate class name '[AppComponent]' found.
-Semantic Error: Duplicate variable 'selectedProduct' in class '[AppComponent]'
-Semantic Error: Index 3 out of bounds for array 'products' with length 3
-Semantic Error: Variable 'pp' used but not defined.
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
+Semantic Error: Duplicate variable 'product' in class '[ProductFormComponent]'
 Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Invalid CSS property name 'dd'
-Semantic Error: Invalid CSS property name 'dd'
-Semantic Error: Invalid CSS property name 'dd'
-Semantic Error: Duplicate variable 'product' in class '[ProductDetailsComponent]'
-Semantic Error: Duplicate variable 'product' in class '[ProductDetailsComponent]'
+Semantic Error: Duplicate variable 'products' in class '[ProductListComponent, OnInit]'
+Semantic Error: Duplicate variable 'product' in class '[ProductFormComponent]'
 Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Duplicate class name '[AppComponent]' found.
-Semantic Error: Duplicate variable 'selectedProduct' in class '[AppComponent]'
-Semantic Error: Index 3 out of bounds for array 'products' with length 3
-Semantic Error: Variable 'pp' used but not defined.
-Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Invalid CSS property name 'dd'
-Semantic Error: Duplicate class name '[AppComponent]' found.
-Semantic Error: Index 3 out of bounds for array 'products' with length 3
-Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Invalid CSS property name 'dd'
-Semantic Error: Duplicate class name '[AppComponent]' found.
-Semantic Error: Variable 'ppp' used but not defined.
-Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Invalid CSS property name 'dd'
-Semantic Error: Variable 'ppp' used but not defined.
-Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Variable 'ppp' used but not defined.
-Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Variable 'oooo' used but not defined.
-Semantic Error: Duplicate class name '[AppComponent]' found.
-Semantic Error: Index 3 out of bounds for array 'products' with length 3
-Semantic Error: Missing 'template' field in @Component decorator.
-Semantic Error: Invalid CSS property name 'dd'
